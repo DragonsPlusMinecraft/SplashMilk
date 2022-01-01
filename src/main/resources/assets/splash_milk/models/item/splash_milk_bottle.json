@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "splash_milk:item/splash_milk_bottle"
+  }
+}
