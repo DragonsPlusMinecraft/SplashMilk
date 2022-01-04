@@ -11,6 +11,6 @@ import net.minecraftforge.fml.common.Mod;
 public class ParticleFactoryRegistry {
     @SubscribeEvent
     public static void onParticleFactoryRegistration(ParticleFactoryRegisterEvent event) {
-        Minecraft.getInstance().particleEngine.register(ParticleTypeRegistry.MILK_AREA_EFFECT.get(), HeartParticle.AngryVillagerFactory::new);
+        Minecraft.getInstance().particleEngine.register(ParticleTypeRegistry.MILK_AREA_EFFECT.get(), HeartParticle.AngryVillagerProvider::new);
     }
 }

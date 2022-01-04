@@ -2,37 +2,45 @@ package love.marblegate.splashmilk.entity;
 
 import love.marblegate.splashmilk.registry.EntityRegistry;
 import love.marblegate.splashmilk.registry.ItemRegistry;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.CampfireBlock;
-import net.minecraft.entity.*;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.projectile.ProjectileItemEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.network.IPacket;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.CampfireBlock;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.ThrowableItemProjectile;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.network.protocol.Packet;
 import net.minecraft.tags.BlockTags;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.*;
-import net.minecraft.world.World;
-import net.minecraftforge.fml.network.NetworkHooks;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.core.Direction;
+import net.minecraft.world.level.Level;
 
 import java.util.List;
 import java.util.function.Predicate;
 
-public class MilkBottleEntity extends ProjectileItemEntity implements IRendersAsItem {
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.projectile.ItemSupplier;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.EntityHitResult;
+import net.minecraft.world.phys.HitResult;
+import net.minecraftforge.fmllegacy.network.NetworkHooks;
+
+public class MilkBottleEntity extends ThrowableItemProjectile implements ItemSupplier {
     public static final Predicate<LivingEntity> WATER_SENSITIVE = LivingEntity::isSensitiveToWater;
 
-    public MilkBottleEntity(EntityType<? extends MilkBottleEntity> entityType, World world) {
+    public MilkBottleEntity(EntityType<? extends MilkBottleEntity> entityType, Level world) {
         super(entityType, world);
     }
 
-    public MilkBottleEntity(World world, LivingEntity livingEntity) {
+    public MilkBottleEntity(Level world, LivingEntity livingEntity) {
         super(EntityRegistry.MILK_BOTTLE.get(), livingEntity, world);
     }
 
-    public MilkBottleEntity(World world, double x, double y, double z) {
+    public MilkBottleEntity(Level world, double x, double y, double z) {
         super(EntityRegistry.MILK_BOTTLE.get(), x, y, z, world);
     }
 
@@ -47,7 +55,7 @@ public class MilkBottleEntity extends ProjectileItemEntity implements IRendersAs
     }
 
     @Override
-    protected void onHitBlock(BlockRayTraceResult blockRayTraceResult) {
+    protected void onHitBlock(BlockHitResult blockRayTraceResult) {
         super.onHitBlock(blockRayTraceResult);
         if (!level.isClientSide) {
             Direction direction = blockRayTraceResult.getDirection();
@@ -65,7 +73,7 @@ public class MilkBottleEntity extends ProjectileItemEntity implements IRendersAs
     }
 
     @Override
-    protected void onHit(RayTraceResult rayTraceResult) {
+    protected void onHit(HitResult rayTraceResult) {
         super.onHit(rayTraceResult);
         if (!level.isClientSide) {
 
@@ -74,16 +82,16 @@ public class MilkBottleEntity extends ProjectileItemEntity implements IRendersAs
             if (isLingering()) {
                 makeAreaOfEffectCloud();
             } else {
-                applySplash(rayTraceResult.getType() == RayTraceResult.Type.ENTITY ? ((EntityRayTraceResult) rayTraceResult).getEntity() : null);
+                applySplash(rayTraceResult.getType() == HitResult.Type.ENTITY ? ((EntityHitResult) rayTraceResult).getEntity() : null);
             }
             // 2007 see PotionEntity & WorldRenderer, 16253176 see PotionUtils#getColor
             this.level.levelEvent(2007, this.blockPosition(), 16777215);
-            remove();
+            remove(RemovalReason.DISCARDED);
         }
     }
 
     private void applyWater() {
-        AxisAlignedBB axisalignedbb = getBoundingBox().inflate(4.0D, 2.0D, 4.0D);
+        AABB axisalignedbb = getBoundingBox().inflate(4.0D, 2.0D, 4.0D);
         List<LivingEntity> list = level.getEntitiesOfClass(LivingEntity.class, axisalignedbb, WATER_SENSITIVE);
         if (!list.isEmpty()) {
             for (LivingEntity livingentity : list) {
@@ -97,7 +105,7 @@ public class MilkBottleEntity extends ProjectileItemEntity implements IRendersAs
     }
 
     private void applySplash(Entity entity) {
-        AxisAlignedBB axisalignedbb = getBoundingBox().inflate(4.0D, 2.0D, 4.0D);
+        AABB axisalignedbb = getBoundingBox().inflate(4.0D, 2.0D, 4.0D);
         List<LivingEntity> list = level.getEntitiesOfClass(LivingEntity.class, axisalignedbb);
         if (!list.isEmpty()) {
             for (LivingEntity livingentity : list) {
@@ -131,15 +139,15 @@ public class MilkBottleEntity extends ProjectileItemEntity implements IRendersAs
         if (blockstate.is(BlockTags.FIRE)) {
             level.removeBlock(blockPos, false);
         } else if (CampfireBlock.isLitCampfire(blockstate)) {
-            level.levelEvent((PlayerEntity) null, 1009, blockPos, 0);
-            CampfireBlock.dowse(level, blockPos, blockstate);
+            level.levelEvent((Player) null, 1009, blockPos, 0);
+            CampfireBlock.dowse(null,level, blockPos, blockstate);
             level.setBlockAndUpdate(blockPos, blockstate.setValue(CampfireBlock.LIT, false));
         }
 
     }
 
     @Override
-    public IPacket<?> getAddEntityPacket() {
+    public Packet<?> getAddEntityPacket() {
         return NetworkHooks.getEntitySpawningPacket(this);
     }
 }
