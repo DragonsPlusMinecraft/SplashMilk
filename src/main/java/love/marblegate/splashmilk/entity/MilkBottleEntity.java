@@ -36,14 +36,17 @@ public class MilkBottleEntity extends ProjectileItemEntity implements IRendersAs
         super(EntityRegistry.MILK_BOTTLE.get(), x, y, z, world);
     }
 
+    @Override
     protected Item getDefaultItem() {
         return ItemRegistry.SPLASH_MILK_BOTTLE.get();
     }
 
+    @Override
     protected float getGravity() {
         return 0.05F;
     }
 
+    @Override
     protected void onHitBlock(BlockRayTraceResult blockRayTraceResult) {
         super.onHitBlock(blockRayTraceResult);
         if (!level.isClientSide) {
@@ -61,6 +64,7 @@ public class MilkBottleEntity extends ProjectileItemEntity implements IRendersAs
         }
     }
 
+    @Override
     protected void onHit(RayTraceResult rayTraceResult) {
         super.onHit(rayTraceResult);
         if (!level.isClientSide) {
@@ -134,6 +138,7 @@ public class MilkBottleEntity extends ProjectileItemEntity implements IRendersAs
 
     }
 
+    @Override
     public IPacket<?> getAddEntityPacket() {
         return NetworkHooks.getEntitySpawningPacket(this);
     }

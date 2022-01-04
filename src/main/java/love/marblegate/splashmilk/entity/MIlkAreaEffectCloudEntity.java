@@ -25,8 +25,8 @@ import java.util.Map;
 import java.util.UUID;
 
 public class MIlkAreaEffectCloudEntity extends Entity {
-    private static final DataParameter<Float> DATA_RADIUS = EntityDataManager.defineId(AreaEffectCloudEntity.class, DataSerializers.FLOAT);
-    private static final DataParameter<Boolean> DATA_WAITING = EntityDataManager.defineId(AreaEffectCloudEntity.class, DataSerializers.BOOLEAN);
+    private static final DataParameter<Float> DATA_RADIUS = EntityDataManager.defineId(MIlkAreaEffectCloudEntity.class, DataSerializers.FLOAT);
+    private static final DataParameter<Boolean> DATA_WAITING = EntityDataManager.defineId(MIlkAreaEffectCloudEntity.class, DataSerializers.BOOLEAN);
     private static final IParticleData PARTICLE = ParticleTypeRegistry.MILK_AREA_EFFECT.get();
     private final Map<Entity, Integer> victims = Maps.newHashMap();
     private int duration = 600;
@@ -49,11 +49,13 @@ public class MIlkAreaEffectCloudEntity extends Entity {
         setPos(p_i46810_2_, p_i46810_4_, p_i46810_6_);
     }
 
+    @Override
     protected void defineSynchedData() {
         getEntityData().define(DATA_RADIUS, 0.5F);
         getEntityData().define(DATA_WAITING, false);
     }
 
+    @Override
     public void refreshDimensions() {
         double d0 = getX();
         double d1 = getY();
@@ -88,6 +90,7 @@ public class MIlkAreaEffectCloudEntity extends Entity {
         duration = p_184486_1_;
     }
 
+    @Override
     public void tick() {
         super.tick();
         boolean flag = isWaiting();
@@ -215,6 +218,7 @@ public class MIlkAreaEffectCloudEntity extends Entity {
         ownerUUID = p_184481_1_ == null ? null : p_184481_1_.getUUID();
     }
 
+    @Override
     protected void readAdditionalSaveData(CompoundNBT p_70037_1_) {
         tickCount = p_70037_1_.getInt("Age");
         duration = p_70037_1_.getInt("Duration");
@@ -230,6 +234,7 @@ public class MIlkAreaEffectCloudEntity extends Entity {
 
     }
 
+    @Override
     protected void addAdditionalSaveData(CompoundNBT p_213281_1_) {
         p_213281_1_.putInt("Age", tickCount);
         p_213281_1_.putInt("Duration", duration);
@@ -245,6 +250,7 @@ public class MIlkAreaEffectCloudEntity extends Entity {
 
     }
 
+    @Override
     public void onSyncedDataUpdated(DataParameter<?> p_184206_1_) {
         if (DATA_RADIUS.equals(p_184206_1_)) {
             refreshDimensions();
@@ -253,14 +259,17 @@ public class MIlkAreaEffectCloudEntity extends Entity {
         super.onSyncedDataUpdated(p_184206_1_);
     }
 
+    @Override
     public PushReaction getPistonPushReaction() {
         return PushReaction.IGNORE;
     }
 
+    @Override
     public EntitySize getDimensions(Pose p_213305_1_) {
         return EntitySize.scalable(getRadius() * 2.0F, 0.5F);
     }
 
+    @Override
     public IPacket<?> getAddEntityPacket() {
         return NetworkHooks.getEntitySpawningPacket(this);
     }
