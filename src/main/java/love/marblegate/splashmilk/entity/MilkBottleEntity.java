@@ -40,10 +40,6 @@ public class MilkBottleEntity extends ThrowableItemProjectile implements ItemSup
         super(EntityRegistry.MILK_BOTTLE.get(), livingEntity, world);
     }
 
-    public MilkBottleEntity(Level world, double x, double y, double z) {
-        super(EntityRegistry.MILK_BOTTLE.get(), x, y, z, world);
-    }
-
     @Override
     protected Item getDefaultItem() {
         return ItemRegistry.SPLASH_MILK_BOTTLE.get();
