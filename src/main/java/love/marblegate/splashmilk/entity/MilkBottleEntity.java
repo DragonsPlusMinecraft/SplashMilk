@@ -2,6 +2,7 @@ package love.marblegate.splashmilk.entity;
 
 import love.marblegate.splashmilk.registry.EntityRegistry;
 import love.marblegate.splashmilk.registry.ItemRegistry;
+import net.minecraft.world.level.block.AbstractCandleBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.CampfireBlock;
 import net.minecraft.world.entity.player.Player;
@@ -134,6 +135,9 @@ public class MilkBottleEntity extends ThrowableItemProjectile implements ItemSup
         BlockState blockstate = level.getBlockState(blockPos);
         if (blockstate.is(BlockTags.FIRE)) {
             level.removeBlock(blockPos, false);
+        }
+        else if (AbstractCandleBlock.isLit(blockstate)) {
+            AbstractCandleBlock.extinguish((Player)null, blockstate, this.level, blockPos);
         } else if (CampfireBlock.isLitCampfire(blockstate)) {
             level.levelEvent((Player) null, 1009, blockPos, 0);
             CampfireBlock.dowse(null,level, blockPos, blockstate);
