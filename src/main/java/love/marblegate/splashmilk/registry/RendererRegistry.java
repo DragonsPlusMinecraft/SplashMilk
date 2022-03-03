@@ -1,6 +1,6 @@
 package love.marblegate.splashmilk.registry;
 
-import love.marblegate.splashmilk.renderer.MilkAreaEffectCloudRenderer;
+import net.minecraft.client.renderer.entity.NoopRenderer;
 import net.minecraft.client.renderer.entity.ThrownItemRenderer;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -13,7 +13,7 @@ public class RendererRegistry {
     @OnlyIn(Dist.CLIENT)
     @SubscribeEvent
     public static void onClientSetUpEvent(EntityRenderersEvent.RegisterRenderers event) {
-        event.registerEntityRenderer(EntityRegistry.MILK_AREA_EFFECT_CLOUD.get(), MilkAreaEffectCloudRenderer::new);
+        event.registerEntityRenderer(EntityRegistry.MILK_AREA_EFFECT_CLOUD.get(), NoopRenderer::new);
         event.registerEntityRenderer(EntityRegistry.MILK_BOTTLE.get(), ThrownItemRenderer::new);
     }
 }
