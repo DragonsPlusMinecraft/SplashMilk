@@ -12,7 +12,7 @@ apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 
-version = '1.2.3'
+version = '1.2.4'
 group = 'love.marblegate' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = 'splash_milk-1.18.2'
 
@@ -55,7 +55,7 @@ minecraft {
             property 'forge.logging.console.level', 'debug'
 
             mods {
-                omni_card {
+                splash_milk {
                     source sourceSets.main
                 }
             }
@@ -77,7 +77,7 @@ minecraft {
             property 'forge.logging.console.level', 'debug'
 
             mods {
-                omni_card {
+                splash_milk {
                     source sourceSets.main
                 }
             }
@@ -99,10 +99,10 @@ minecraft {
             property 'forge.logging.console.level', 'debug'
 
             // Specify the modid for data generation, where to output the resulting resource, and where to look for existing resources.
-            args '--mod', 'omni_card', '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
+            args '--mod', 'splash_milk', '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
 
             mods {
-                omni_card {
+                splash_milk {
                     source sourceSets.main
                 }
             }

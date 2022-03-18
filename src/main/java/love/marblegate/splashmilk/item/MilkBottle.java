@@ -2,14 +2,13 @@ package love.marblegate.splashmilk.item;
 
 import love.marblegate.splashmilk.entity.MilkBottleEntity;
 import love.marblegate.splashmilk.registry.ItemRegistry;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.CreativeModeTab;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.InteractionResultHolder;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.sounds.SoundSource;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.*;
 import net.minecraft.world.level.Level;
 
 public class MilkBottle extends Item {
@@ -18,22 +17,38 @@ public class MilkBottle extends Item {
     }
 
     @Override
-    public InteractionResultHolder<ItemStack> use(Level world, Player player, InteractionHand hand) {
-        ItemStack itemstack = player.getItemInHand(hand);
-        boolean isLingering = itemstack.getItem().equals(ItemRegistry.LINGERING_MILK_BOTTLE.get());
-        world.playSound((Player) null, player.getX(), player.getY(), player.getZ(), isLingering ? SoundEvents.LINGERING_POTION_THROW : SoundEvents.SPLASH_POTION_THROW, SoundSource.NEUTRAL, 0.5F, (float) (0.4F / (Math.random() * 0.4F + 0.8F)));
+    public int getUseDuration(ItemStack stack) {
+        return 10;
+    }
 
-        if (!world.isClientSide) {
-            MilkBottleEntity milkBottleEntity = new MilkBottleEntity(world, player);
-            milkBottleEntity.setItem(itemstack);
-            milkBottleEntity.shootFromRotation(player, player.xRotO, player.yRotO, -20.0F, 0.5F, 1.0F);
-            world.addFreshEntity(milkBottleEntity);
+    @Override
+    public UseAnim getUseAnimation(ItemStack stack) {
+        return UseAnim.DRINK;
+    }
+
+    @Override
+    public ItemStack finishUsingItem(ItemStack itemStack, Level level, LivingEntity livingEntity) {
+        if(!level.isClientSide())
+            livingEntity.curePotionEffects(new ItemStack(Items.MILK_BUCKET));
+        if(livingEntity instanceof Player player){
+            if (!player.getAbilities().instabuild) {
+                itemStack.shrink(1);
+            }
+            if(itemStack.isEmpty()){
+               return new ItemStack(Items.GLASS_BOTTLE);
+            } else {
+                if (!player.getAbilities().instabuild) {
+                    player.getInventory().add(new ItemStack(Items.GLASS_BOTTLE));
+                }
+                return itemStack;
+            }
+        } else {
+            itemStack.shrink(1);
+            return itemStack;
         }
+    }
 
-        if (!player.getAbilities().instabuild) {
-            itemstack.shrink(1);
-        }
-
-        return InteractionResultHolder.sidedSuccess(itemstack, world.isClientSide());
+    public InteractionResultHolder<ItemStack> use(Level p_42993_, Player p_42994_, InteractionHand p_42995_) {
+        return ItemUtils.startUsingInstantly(p_42993_, p_42994_, p_42995_);
     }
 }
