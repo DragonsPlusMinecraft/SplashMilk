@@ -2,14 +2,10 @@ package love.marblegate.splashmilk.item;
 
 import love.marblegate.splashmilk.entity.MilkBottleEntity;
 import love.marblegate.splashmilk.registry.ItemRegistry;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.Hand;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvents;
+import net.minecraft.item.*;
+import net.minecraft.util.*;
 import net.minecraft.world.World;
 
 public class MilkBottle extends Item {
@@ -18,22 +14,42 @@ public class MilkBottle extends Item {
     }
 
     @Override
-    public ActionResult<ItemStack> use(World world, PlayerEntity player, Hand hand) {
-        ItemStack itemstack = player.getItemInHand(hand);
-        boolean isLingering = itemstack.getItem().equals(ItemRegistry.LINGERING_MILK_BOTTLE.get());
-        world.playSound((PlayerEntity) null, player.getX(), player.getY(), player.getZ(), isLingering ? SoundEvents.LINGERING_POTION_THROW : SoundEvents.SPLASH_POTION_THROW, SoundCategory.NEUTRAL, 0.5F, 0.4F / (random.nextFloat() * 0.4F + 0.8F));
-
-        if (!world.isClientSide) {
-            MilkBottleEntity milkBottleEntity = new MilkBottleEntity(world, player);
-            milkBottleEntity.setItem(itemstack);
-            milkBottleEntity.shootFromRotation(player, player.xRot, player.yRot, -20.0F, 0.5F, 1.0F);
-            world.addFreshEntity(milkBottleEntity);
-        }
-
-        if (!player.abilities.instabuild) {
-            itemstack.shrink(1);
-        }
-
-        return ActionResult.sidedSuccess(itemstack, world.isClientSide());
+    public int getUseDuration(ItemStack stack) {
+        return 10;
     }
+
+    @Override
+    public ActionResult<ItemStack> use(World world, PlayerEntity playerEntity, Hand hand) {
+        return DrinkHelper.useDrink(world, playerEntity, hand);
+    }
+
+    @Override
+    public ItemStack finishUsingItem(ItemStack itemStack, World world, LivingEntity livingEntity) {
+        if(!world.isClientSide())
+            livingEntity.curePotionEffects(new ItemStack(Items.MILK_BUCKET));
+        if(livingEntity instanceof PlayerEntity){
+            PlayerEntity player = (PlayerEntity) livingEntity;
+            if (!player.abilities.instabuild) {
+                itemStack.shrink(1);
+            }
+            if(itemStack.isEmpty()){
+                return new ItemStack(Items.GLASS_BOTTLE);
+            } else {
+                if (!player.abilities.instabuild) {
+                    player.inventory.add(new ItemStack(Items.GLASS_BOTTLE));
+                }
+                return itemStack;
+            }
+        } else {
+            itemStack.shrink(1);
+            return itemStack;
+        }
+    }
+
+    @Override
+    public UseAction getUseAnimation(ItemStack itemStack) {
+        return UseAction.DRINK;
+    }
+
+
 }
