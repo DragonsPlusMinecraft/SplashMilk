@@ -25,6 +25,8 @@ import java.util.Map;
 import java.util.UUID;
 
 
+import net.minecraft.world.entity.Entity.RemovalReason;
+
 public class MIlkAreaEffectCloudEntity extends Entity {
     private static final EntityDataAccessor<Float> DATA_RADIUS = SynchedEntityData.defineId(MIlkAreaEffectCloudEntity.class, EntityDataSerializers.FLOAT);
     private static final EntityDataAccessor<Boolean> DATA_WAITING = SynchedEntityData.defineId(MIlkAreaEffectCloudEntity.class, EntityDataSerializers.BOOLEAN);

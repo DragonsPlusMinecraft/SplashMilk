@@ -11,6 +11,8 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.Level;
 
+import net.minecraft.world.item.Item.Properties;
+
 public class MilkBottle extends Item {
     public MilkBottle() {
         super(new Properties().tab(CreativeModeTab.TAB_BREWING));

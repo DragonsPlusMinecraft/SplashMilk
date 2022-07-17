@@ -12,6 +12,8 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.level.Level;
 
+import net.minecraft.world.item.Item.Properties;
+
 public class ThrowableMilkBottle extends Item {
     public ThrowableMilkBottle() {
         super(new Properties().tab(CreativeModeTab.TAB_BREWING));

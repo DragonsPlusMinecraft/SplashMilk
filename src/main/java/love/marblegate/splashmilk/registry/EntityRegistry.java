@@ -10,7 +10,7 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 
 public class EntityRegistry {
-    public static final DeferredRegister<EntityType<?>> ENTITIES = DeferredRegister.create(ForgeRegistries.ENTITIES, SplashMilk.MOD_ID);
+    public static final DeferredRegister<EntityType<?>> ENTITIES = DeferredRegister.create(ForgeRegistries.ENTITY_TYPES, SplashMilk.MOD_ID);
     public static final RegistryObject<EntityType<MIlkAreaEffectCloudEntity>> MILK_AREA_EFFECT_CLOUD = ENTITIES.register("milk_area_effect_cloud",
             () -> EntityType.Builder.<MIlkAreaEffectCloudEntity>of(MIlkAreaEffectCloudEntity::new, MobCategory.MISC)
                     .fireImmune().sized(6.0F, 0.5F).clientTrackingRange(10).updateInterval(Integer.MAX_VALUE)
