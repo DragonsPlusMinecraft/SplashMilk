@@ -11,9 +11,11 @@ public class SplashMilk {
     public static String MOD_ID = "splash_milk";
 
     public SplashMilk() {
-        // TODO add brewing & crafting(maybe?) recipe
-        ItemRegistry.ITEMS.register(FMLJavaModLoadingContext.get().getModEventBus());
-        EntityRegistry.ENTITIES.register(FMLJavaModLoadingContext.get().getModEventBus());
-        ParticleTypeRegistry.PARTICLE_TYPES.register(FMLJavaModLoadingContext.get().getModEventBus());
+        var modEventbus = FMLJavaModLoadingContext.get().getModEventBus();
+        ItemRegistry.ITEMS.register(modEventbus);
+        EntityRegistry.ENTITIES.register(modEventbus);
+        ParticleTypeRegistry.PARTICLE_TYPES.register(modEventbus);
+
+        modEventbus.addListener(ItemRegistry::addToCreativeTab);
     }
 }

@@ -1,9 +1,5 @@
 package love.marblegate.splashmilk.item;
 
-import love.marblegate.splashmilk.entity.MilkBottleEntity;
-import love.marblegate.splashmilk.registry.ItemRegistry;
-import net.minecraft.sounds.SoundEvents;
-import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.LivingEntity;
@@ -11,11 +7,9 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.Level;
 
-import net.minecraft.world.item.Item.Properties;
-
 public class MilkBottle extends Item {
     public MilkBottle() {
-        super(new Properties().tab(CreativeModeTab.TAB_BREWING));
+        super(new Properties());
     }
 
     @Override

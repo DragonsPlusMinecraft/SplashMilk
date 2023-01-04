@@ -2,6 +2,7 @@ package love.marblegate.splashmilk.entity;
 
 import love.marblegate.splashmilk.registry.EntityRegistry;
 import love.marblegate.splashmilk.registry.ItemRegistry;
+import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.world.level.block.AbstractCandleBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.CampfireBlock;
@@ -149,7 +150,7 @@ public class MilkBottleEntity extends ThrowableItemProjectile implements ItemSup
     }
 
     @Override
-    public Packet<?> getAddEntityPacket() {
+    public Packet<ClientGamePacketListener> getAddEntityPacket() {
         return NetworkHooks.getEntitySpawningPacket(this);
     }
 }
