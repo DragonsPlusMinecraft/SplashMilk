@@ -1,7 +1,7 @@
-package love.marblegate.splashmilk.entity;
+package plus.dragons.splashmilk.entity;
 
-import love.marblegate.splashmilk.registry.EntityRegistry;
-import love.marblegate.splashmilk.registry.ItemRegistry;
+import plus.dragons.splashmilk.registry.EntityRegistry;
+import plus.dragons.splashmilk.registry.ItemRegistry;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.world.level.block.AbstractCandleBlock;
 import net.minecraft.world.level.block.state.BlockState;
@@ -13,7 +13,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.tags.BlockTags;
-import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.Level;
 
@@ -30,8 +29,6 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraftforge.network.NetworkHooks;
-
-import net.minecraft.world.entity.Entity.RemovalReason;
 
 public class MilkBottleEntity extends ThrowableItemProjectile implements ItemSupplier {
     public static final Predicate<LivingEntity> WATER_SENSITIVE = LivingEntity::isSensitiveToWater;
@@ -97,7 +94,7 @@ public class MilkBottleEntity extends ThrowableItemProjectile implements ItemSup
             for (LivingEntity livingentity : list) {
                 double d0 = distanceToSqr(livingentity);
                 if (d0 < 16.0D && livingentity.isSensitiveToWater()) {
-                    livingentity.hurt(DamageSource.indirectMagic(livingentity, getOwner()), 1.0F);
+                    livingentity.hurt(livingentity.damageSources().indirectMagic(livingentity, getOwner()), 1.0F);
                 }
             }
         }

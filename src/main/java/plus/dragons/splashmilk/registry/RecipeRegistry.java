@@ -1,4 +1,4 @@
-package love.marblegate.splashmilk.registry;
+package plus.dragons.splashmilk.registry;
 
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;

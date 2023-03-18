@@ -1,8 +1,8 @@
-package love.marblegate.splashmilk.entity;
+package plus.dragons.splashmilk.entity;
 
 import com.google.common.collect.Maps;
-import love.marblegate.splashmilk.registry.EntityRegistry;
-import love.marblegate.splashmilk.registry.ParticleTypeRegistry;
+import plus.dragons.splashmilk.registry.EntityRegistry;
+import plus.dragons.splashmilk.registry.ParticleTypeRegistry;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
@@ -24,9 +24,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-
-
-import net.minecraft.world.entity.Entity.RemovalReason;
 
 public class MIlkAreaEffectCloudEntity extends Entity {
     private static final EntityDataAccessor<Float> DATA_RADIUS = SynchedEntityData.defineId(MIlkAreaEffectCloudEntity.class, EntityDataSerializers.FLOAT);

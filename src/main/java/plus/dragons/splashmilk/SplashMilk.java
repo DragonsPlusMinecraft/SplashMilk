@@ -1,8 +1,8 @@
-package love.marblegate.splashmilk;
+package plus.dragons.splashmilk;
 
-import love.marblegate.splashmilk.registry.EntityRegistry;
-import love.marblegate.splashmilk.registry.ItemRegistry;
-import love.marblegate.splashmilk.registry.ParticleTypeRegistry;
+import plus.dragons.splashmilk.registry.EntityRegistry;
+import plus.dragons.splashmilk.registry.ItemRegistry;
+import plus.dragons.splashmilk.registry.ParticleTypeRegistry;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 

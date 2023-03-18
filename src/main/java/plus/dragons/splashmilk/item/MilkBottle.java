@@ -1,4 +1,4 @@
-package love.marblegate.splashmilk.item;
+package plus.dragons.splashmilk.item;
 
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;

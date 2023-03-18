@@ -1,8 +1,8 @@
-package love.marblegate.splashmilk.registry;
+package plus.dragons.splashmilk.registry;
 
-import love.marblegate.splashmilk.SplashMilk;
-import love.marblegate.splashmilk.item.MilkBottle;
-import love.marblegate.splashmilk.item.ThrowableMilkBottle;
+import plus.dragons.splashmilk.SplashMilk;
+import plus.dragons.splashmilk.item.MilkBottle;
+import plus.dragons.splashmilk.item.ThrowableMilkBottle;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.event.CreativeModeTabEvent;

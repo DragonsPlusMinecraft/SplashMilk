@@ -1,7 +1,7 @@
-package love.marblegate.splashmilk.item;
+package plus.dragons.splashmilk.item;
 
-import love.marblegate.splashmilk.entity.MilkBottleEntity;
-import love.marblegate.splashmilk.registry.ItemRegistry;
+import plus.dragons.splashmilk.entity.MilkBottleEntity;
+import plus.dragons.splashmilk.registry.ItemRegistry;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;

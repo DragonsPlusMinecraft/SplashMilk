@@ -1,6 +1,6 @@
-package love.marblegate.splashmilk.registry;
+package plus.dragons.splashmilk.registry;
 
-import love.marblegate.splashmilk.SplashMilk;
+import plus.dragons.splashmilk.SplashMilk;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraftforge.registries.RegistryObject;

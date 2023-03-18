@@ -1,4 +1,4 @@
-package love.marblegate.splashmilk.registry;
+package plus.dragons.splashmilk.registry;
 
 import net.minecraft.client.renderer.entity.NoopRenderer;
 import net.minecraft.client.renderer.entity.ThrownItemRenderer;
