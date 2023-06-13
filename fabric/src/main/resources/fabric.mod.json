@@ -1,0 +1,33 @@
+{
+  "schemaVersion": 1,
+  "id": "splash_milk",
+  "version": "${version}",
+  "name": "Splash Milk",
+  "description": "Milk splash potion should exists.",
+  "authors": [
+    "MarbleGateKeeper"
+  ],
+  "contact": {
+    "homepage": "https://www.curseforge.com/minecraft/mc-mods/the-splash-milk",
+    "sources": "https://github.com/MarbleGateKeeper/SplashMilk"
+  },
+
+  "license": "MIT",
+  "icon": "icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "plus.dragons.splashmilk.fabric.SplashMilk"
+    ],
+    "client": [
+      "plus.dragons.splashmilk.fabric.ClientEntry"
+    ]
+  },
+  "mixins": [
+    "splash_mlik.mixins.json"
+  ],
+  "depends": {
+    "fabric": "*",
+    "minecraft": ">=1.20"
+  }
+}

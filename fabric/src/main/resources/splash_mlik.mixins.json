@@ -1,0 +1,16 @@
+{
+  "required": true,
+  "package": "plus.dragons.splashmilk.fabric.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "minVersion": "0.8",
+  "client": [
+  ],
+  "mixins": [
+    "MixinBrewingStandBlockEntity",
+    "MixinBrewingStandScreenHandlerPotionSlot",
+    "MixinIngredientSlot"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
