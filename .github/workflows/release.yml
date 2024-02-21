@@ -33,6 +33,30 @@ jobs:
       - name: Build
         run: ./gradlew build
 
+      - name: Publish NeoForge to CurseForge
+        uses: Kir-Antipov/mc-publish@v3.2
+        with:
+          # CurseForge
+          curseforge-id: ${{ env.CURSEFORGE_ID }}
+          curseforge-token: ${{ secrets.CURSEFORGE_TOKEN }}
+
+          # Config
+          name: "[NeoForge] Splash Milk ${{ env.VERSION }} for ${{ env.MINECRAFT_VERSION }}"
+          version: ${{ env.VERSION }}
+          version-type: release
+          changelog-file: changelog/${{ env.VERSION }}.md
+          files-primary: neoforge/build/libs/*-${{ env.VERSION }}!(-@(dev|sources|slim)).jar
+          files-secondary: ""
+
+          loaders: |
+            neoforge
+          game-versions: |
+            ${{ env.MINECRAFT_VERSION }}
+          java: |
+            ${{ env.JAVA_VERSION }}
+          retry-attempts: 2
+          retry-delay: 10000
+
       - name: Publish Forge to CurseForge
         uses: Kir-Antipov/mc-publish@v3.2
         with:
@@ -80,6 +104,31 @@ jobs:
           dependencies: |
             cloth-config(required)
             modmenu(optional)
+          java: |
+            ${{ env.JAVA_VERSION }}
+          retry-attempts: 2
+          retry-delay: 10000
+
+      - name: Publish NeoForge to Modrinth
+        uses: Kir-Antipov/mc-publish@v3.2
+        with:
+          # Modrinth
+          modrinth-id: ${{ env.MODRINTH_ID }}
+          modrinth-featured: true
+          modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
+
+          # Config
+          name: "The Splash Milk ${{ env.VERSION }} for ${{ env.MINECRAFT_VERSION }}"
+          version: ${{ env.VERSION }}
+          version-type: release
+          changelog-file: changelog/${{ env.VERSION }}.md
+          files-primary: neoforge/build/libs/*-${{ env.VERSION }}!(-@(dev|sources|slim)).jar
+          files-secondary: ""
+
+          loaders: |
+            neoforge
+          game-versions: |
+            ${{ env.MINECRAFT_VERSION }}
           java: |
             ${{ env.JAVA_VERSION }}
           retry-attempts: 2
