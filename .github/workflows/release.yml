@@ -5,7 +5,7 @@ permissions:
   contents: write
 
 env:
-  MINECRAFT_VERSION: 1.20.1
+  MINECRAFT_VERSION: 1.20.4
   JAVA_VERSION: 17
   VERSION: 2.1.0
   MODRINTH_ID: ELrdP6OH
@@ -45,8 +45,7 @@ jobs:
           version: ${{ env.VERSION }}
           version-type: release
           changelog-file: changelog/${{ env.VERSION }}.md
-          files-primary: neoforge/build/libs/*-${{ env.VERSION }}!(-@(dev|sources|slim)).jar
-          files-secondary: ""
+          files: neoforge/build/libs/*-${{ env.VERSION }}!(-@(dev|sources|slim|dev-shadow)).jar
 
           loaders: |
             neoforge
@@ -69,8 +68,7 @@ jobs:
           version: ${{ env.VERSION }}
           version-type: release
           changelog-file: changelog/${{ env.VERSION }}.md
-          files-primary: forge/build/libs/*-${{ env.VERSION }}!(-@(dev|sources|slim)).jar
-          files-secondary: ""
+          files: forge/build/libs/*-${{ env.VERSION }}!(-@(dev|sources|slim|dev-shadow)).jar
 
           loaders: |
             forge
@@ -93,8 +91,7 @@ jobs:
           version: ${{ env.VERSION }}
           version-type: release
           changelog-file: changelog/${{ env.VERSION }}.md
-          files-primary: fabric/build/libs/*-${{ env.VERSION }}!(-@(dev|sources|slim)).jar
-          files-secondary: ""
+          files: fabric/build/libs/*-${{ env.VERSION }}!(-@(dev|sources|slim|dev-shadow)).jar
 
           loaders: |
             fabric
@@ -122,8 +119,7 @@ jobs:
           version: ${{ env.VERSION }}
           version-type: release
           changelog-file: changelog/${{ env.VERSION }}.md
-          files-primary: neoforge/build/libs/*-${{ env.VERSION }}!(-@(dev|sources|slim)).jar
-          files-secondary: ""
+          files: neoforge/build/libs/*-${{ env.VERSION }}!(-@(dev|sources|slim|dev-shadow)).jar
 
           loaders: |
             neoforge
@@ -147,8 +143,7 @@ jobs:
           version: ${{ env.VERSION }}
           version-type: release
           changelog-file: changelog/${{ env.VERSION }}.md
-          files-primary: forge/build/libs/*-${{ env.VERSION }}!(-@(dev|sources|slim)).jar
-          files-secondary: ""
+          files: forge/build/libs/*-${{ env.VERSION }}!(-@(dev|sources|slim|dev-shadow)).jar
 
           loaders: |
             forge
@@ -172,8 +167,7 @@ jobs:
           version: ${{ env.VERSION }}
           version-type: release
           changelog-file: changelog/${{ env.VERSION }}.md
-          files-primary: fabric/build/libs/*-${{ env.VERSION }}!(-@(dev|sources|slim)).jar
-          files-secondary: ""
+          files: fabric/build/libs/*-${{ env.VERSION }}!(-@(dev|sources|slim|dev-shadow)).jar
 
           loaders: |
             fabric
