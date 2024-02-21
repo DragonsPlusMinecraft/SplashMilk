@@ -4,17 +4,15 @@ plugins {
 
 architectury {
     platformSetupLoomIde()
-    forge()
+    neoForge()
 }
 
 loom {
-    accessWidenerPath = project(":common").loom.accessWidenerPath
+    //accessWidenerPath = project(":common").loom.accessWidenerPath
 
     neoForge {
-        convertAccessWideners = true
-        extraAccessWideners.add loom.accessWidenerPath.get().asFile.name
-
-        //mixinConfig "examplemod-common.mixins.json"
+        //convertAccessWideners = true
+        //extraAccessWideners.add loom.accessWidenerPath.get().asFile.name
     }
 }
 
@@ -23,10 +21,8 @@ configurations {
     shadowCommon // Don't use shadow from the shadow plugin since it *excludes* files.
     compileClasspath.extendsFrom common
     runtimeClasspath.extendsFrom common
-    developmentForge.extendsFrom common
+    developmentNeoForge.extendsFrom common
 }
-
-maven { url "https://maven.neoforged.net/releases/" }
 
 dependencies {
     neoForge "net.neoforged:neoforge:${rootProject.neoforge_version}"
@@ -34,7 +30,7 @@ dependencies {
     //modApi "dev.architectury:architectury-forge:${rootProject.architectury_version}"
 
     common(project(path: ":common", configuration: "namedElements")) { transitive false }
-    shadowCommon(project(path: ":common", configuration: "transformProductionForge")) { transitive = false }
+    shadowCommon(project(path: ":common", configuration: "transformProductionNeoForge")) { transitive = false }
 }
 
 processResources {

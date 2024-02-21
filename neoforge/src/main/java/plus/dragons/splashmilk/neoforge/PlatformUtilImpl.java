@@ -1,4 +1,4 @@
-package plus.dragons.splashmilk.forge;
+package plus.dragons.splashmilk.neoforge;
 
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.projectile.thrown.ThrownItemEntity;
@@ -6,9 +6,9 @@ import net.minecraft.item.Item;
 import net.minecraft.item.Items;
 import net.minecraft.particle.ParticleEffect;
 import plus.dragons.splashmilk.entity.MIlkAreaEffectCloudEntity;
-import plus.dragons.splashmilk.forge.registry.EntityRegistry;
-import plus.dragons.splashmilk.forge.registry.ItemRegistry;
-import plus.dragons.splashmilk.forge.registry.ParticleTypeRegistry;
+import plus.dragons.splashmilk.neoforge.registry.EntityRegistry;
+import plus.dragons.splashmilk.neoforge.registry.ItemRegistry;
+import plus.dragons.splashmilk.neoforge.registry.ParticleTypeRegistry;
 
 import java.util.function.Supplier;
 
