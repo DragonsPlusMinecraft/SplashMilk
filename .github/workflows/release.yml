@@ -34,7 +34,7 @@ jobs:
         run: ./gradlew build
 
       - name: Publish NeoForge to CurseForge
-        uses: Kir-Antipov/mc-publish@v3.2
+        uses: Kir-Antipov/mc-publish@v3.3
         with:
           # CurseForge
           curseforge-id: ${{ env.CURSEFORGE_ID }}
@@ -58,7 +58,7 @@ jobs:
           retry-delay: 10000
 
       - name: Publish Forge to CurseForge
-        uses: Kir-Antipov/mc-publish@v3.2
+        uses: Kir-Antipov/mc-publish@v3.3
         with:
           # CurseForge
           curseforge-id: ${{ env.CURSEFORGE_ID }}
@@ -82,7 +82,7 @@ jobs:
           retry-delay: 10000
 
       - name: Publish Fabric/Quilt to CurseForge
-        uses: Kir-Antipov/mc-publish@v3.2
+        uses: Kir-Antipov/mc-publish@v3.3
         with:
           # CurseForge
           curseforge-id: ${{ env.CURSEFORGE_ID }}
@@ -110,7 +110,7 @@ jobs:
           retry-delay: 10000
 
       - name: Publish NeoForge to Modrinth
-        uses: Kir-Antipov/mc-publish@v3.2
+        uses: Kir-Antipov/mc-publish@v3.3
         with:
           # Modrinth
           modrinth-id: ${{ env.MODRINTH_ID }}
@@ -135,7 +135,7 @@ jobs:
           retry-delay: 10000
 
       - name: Publish Forge to Modrinth
-        uses: Kir-Antipov/mc-publish@v3.2
+        uses: Kir-Antipov/mc-publish@v3.3
         with:
           # Modrinth
           modrinth-id: ${{ env.MODRINTH_ID }}
@@ -160,7 +160,7 @@ jobs:
           retry-delay: 10000
 
       - name: Publish Fabric/Quilt to Modrinth
-        uses: Kir-Antipov/mc-publish@v3.2
+        uses: Kir-Antipov/mc-publish@v3.3
         with:
           # Modrinth
           modrinth-id: ${{ env.MODRINTH_ID }}
