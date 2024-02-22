@@ -1,5 +1,5 @@
 modLoader="javafml" #mandatory
-loaderVersion="[47,)" #mandatory This is typically bumped every Minecraft version by Forge. See our download page for lists of versions.
+loaderVersion = "[49,)" #mandatory This is typically bumped every Minecraft version by Forge. See our download page for lists of versions.
 license="MIT"
 [[mods]] #mandatory
 modId="splash_milk" #mandatory
@@ -13,12 +13,12 @@ Wait Steve, why don't you try putting milk in a potion bottle?
 [[dependencies.splash_milk]] #optional
 modId="forge" #mandatory
 mandatory=true #mandatory
-versionRange="[47,)" #mandatory
+versionRange = "[49,)" #mandatory
 ordering="NONE"
 side="BOTH"
 [[dependencies.splash_milk]]
 modId="minecraft"
 mandatory=true
-versionRange="[1.20.1,1.20.2)"
+versionRange = "[1.20.4,1.21)"
 ordering="NONE"
 side="BOTH"
