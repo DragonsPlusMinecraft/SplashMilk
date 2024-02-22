@@ -5,9 +5,12 @@ import net.minecraft.client.render.entity.FlyingItemEntityRenderer;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
-@Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
+import plus.dragons.splashmilk.neoforge.SplashMilk;
+
+@EventBusSubscriber(bus = EventBusSubscriber.Bus.MOD,modid = SplashMilk.MOD_ID)
 public class RendererRegistry {
     @OnlyIn(Dist.CLIENT)
     @SubscribeEvent

@@ -1,12 +1,15 @@
 package plus.dragons.splashmilk.fabric.mixin;
 
 import net.minecraft.block.entity.BrewingStandBlockEntity;
+import net.minecraft.component.DataComponentTypes;
+import net.minecraft.component.type.PotionContentsComponent;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.item.ThrowablePotionItem;
 import net.minecraft.potion.Potion;
-import net.minecraft.potion.PotionUtil;
 import net.minecraft.potion.Potions;
+import net.minecraft.recipe.BrewingRecipeRegistry;
+import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -17,11 +20,13 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import plus.dragons.splashmilk.fabric.registry.ItemRegistry;
 
+import java.util.Optional;
+
 
 @Mixin(BrewingStandBlockEntity.class)
 public class MixinBrewingStandBlockEntity {
-    @Inject(method = "canCraft(Lnet/minecraft/util/collection/DefaultedList;)Z", at = @At("HEAD"), cancellable = true)
-    private static void injected(DefaultedList<ItemStack> slots, CallbackInfoReturnable<Boolean> cir) {
+    @Inject(method = "Lnet/minecraft/block/entity/BrewingStandBlockEntity;canCraft(Lnet/minecraft/recipe/BrewingRecipeRegistry;Lnet/minecraft/util/collection/DefaultedList;)Z", at = @At("HEAD"), cancellable = true)
+    private static void injected(BrewingRecipeRegistry brewingRecipeRegistry, DefaultedList<ItemStack> slots, CallbackInfoReturnable<Boolean> cir) {
         ItemStack itemStack = slots.get(3);
         if (itemStack.isOf(Items.MILK_BUCKET)) {
             for (int i = 0; i < 3; ++i) {
@@ -80,8 +85,11 @@ public class MixinBrewingStandBlockEntity {
 
     private static boolean qualifiedWaterBottle(ItemStack itemStack) {
         if (itemStack.getItem() instanceof ThrowablePotionItem) {
-            Potion potion = PotionUtil.getPotion(itemStack);
-            return potion.equals(Potions.WATER) || potion.equals(Potions.MUNDANE) || potion.equals(Potions.THICK) || potion.equals(Potions.AWKWARD);
+            Optional<RegistryEntry<Potion>> optional = itemStack.getOrDefault(DataComponentTypes.POTION_CONTENTS, PotionContentsComponent.DEFAULT).potion();
+            if(optional.isPresent()){
+                var op = optional.get();
+                return op.equals(Potions.WATER) || op.equals(Potions.MUNDANE) || op.equals(Potions.THICK) || op.equals(Potions.AWKWARD);
+            }
         }
         return false;
     }
@@ -92,5 +100,4 @@ public class MixinBrewingStandBlockEntity {
             cir.setReturnValue(true);
         }
     }
-
 }

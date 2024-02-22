@@ -50,7 +50,7 @@ public class MilkBottle extends Item {
     }
 
     @Override
-    public int getMaxUseTime(ItemStack stack) {
+    public int getMaxUseTime(ItemStack stack, LivingEntity user) {
         return 10;
     }
 }

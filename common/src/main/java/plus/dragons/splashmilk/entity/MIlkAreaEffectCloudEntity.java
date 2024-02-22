@@ -10,6 +10,7 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.listener.ClientPlayPacketListener;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.s2c.play.EntitySpawnS2CPacket;
+import net.minecraft.server.network.EntityTrackerEntry;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
@@ -81,9 +82,9 @@ public class MIlkAreaEffectCloudEntity extends Entity {
     }
 
     @Override
-    protected void initDataTracker() {
-        getDataTracker().startTracking(DATA_RADIUS, 0.5F);
-        getDataTracker().startTracking(DATA_WAITING, false);
+    protected void initDataTracker(DataTracker.Builder builder) {
+        builder.add(DATA_RADIUS, 0.5F);
+        builder.add(DATA_WAITING, false);
     }
 
     @Override
@@ -212,11 +213,6 @@ public class MIlkAreaEffectCloudEntity extends Entity {
         if (ownerUUID != null) {
             nbt.putUuid("Owner", ownerUUID);
         }
-    }
-
-    @Override
-    public Packet<ClientPlayPacketListener> createSpawnPacket() {
-        return new EntitySpawnS2CPacket(this);
     }
 
     public void setRadiusOnUse(float radiusOnUse) {

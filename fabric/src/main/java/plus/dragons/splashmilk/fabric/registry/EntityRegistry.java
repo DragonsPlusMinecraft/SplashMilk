@@ -16,10 +16,10 @@ public class EntityRegistry {
     public static EntityType<MilkBottleEntity> MILK_BOTTLE;
 
     public static void ini() {
-        MILK_AREA_EFFECT_CLOUD = Registry.register(Registries.ENTITY_TYPE, new Identifier(SplashMilk.MOD_ID, "milk_area_effect_cloud"),
+        MILK_AREA_EFFECT_CLOUD = Registry.register(Registries.ENTITY_TYPE, Identifier.of(SplashMilk.MOD_ID, "milk_area_effect_cloud"),
                 FabricEntityTypeBuilder.<MIlkAreaEffectCloudEntity>create(SpawnGroup.MISC, MIlkAreaEffectCloudEntity::new)
                         .dimensions(EntityDimensions.fixed(6.0f, 0.5f)).fireImmune().trackRangeBlocks(10).build());
-        MILK_BOTTLE = Registry.register(Registries.ENTITY_TYPE, new Identifier(SplashMilk.MOD_ID, "milk_bottle"),
+        MILK_BOTTLE = Registry.register(Registries.ENTITY_TYPE, Identifier.of(SplashMilk.MOD_ID, "milk_bottle"),
                 FabricEntityTypeBuilder.<MilkBottleEntity>create(SpawnGroup.MISC, MilkBottleEntity::new)
                         .dimensions(EntityDimensions.fixed(0.5f, 0.5f)).fireImmune().trackedUpdateRate(20).trackRangeBlocks(10).build());
 

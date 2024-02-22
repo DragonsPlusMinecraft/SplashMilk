@@ -9,9 +9,6 @@ import net.minecraft.entity.FlyingItemEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.projectile.thrown.ThrownItemEntity;
 import net.minecraft.item.Item;
-import net.minecraft.network.listener.ClientPlayPacketListener;
-import net.minecraft.network.packet.Packet;
-import net.minecraft.network.packet.s2c.play.EntitySpawnS2CPacket;
 import net.minecraft.registry.tag.BlockTags;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.HitResult;
@@ -36,7 +33,7 @@ public class MilkBottleEntity extends ThrownItemEntity implements FlyingItemEnti
     }
 
     @Override
-    protected float getGravity() {
+    protected double getGravity() {
         return 0.05F;
     }
 
@@ -132,11 +129,6 @@ public class MilkBottleEntity extends ThrownItemEntity implements FlyingItemEnti
             getWorld().setBlockState(blockPos, blockState.with(CampfireBlock.LIT, false));
         }
 
-    }
-
-    @Override
-    public Packet<ClientPlayPacketListener> createSpawnPacket() {
-        return new EntitySpawnS2CPacket(this);
     }
 
     @Override

@@ -20,7 +20,9 @@ public class ThrowableMilkBottle extends Item {
     public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
         ItemStack itemstack = user.getStackInHand(hand);
         boolean isLingering = itemstack.getItem().equals(PlatformUtil.getLingerMIlkBottleItem().get());
-        world.playSound(null, user.getX(), user.getY(), user.getZ(), isLingering ? SoundEvents.ENTITY_LINGERING_POTION_THROW : SoundEvents.ENTITY_SPLASH_POTION_THROW, SoundCategory.NEUTRAL, 0.5F, (float) (0.4F / (Math.random() * 0.4F + 0.8F)));
+        world.playSound(null, user.getX(), user.getY(), user.getZ(),
+                isLingering ? SoundEvents.ENTITY_LINGERING_POTION_THROW : SoundEvents.ENTITY_SPLASH_POTION_THROW,
+                SoundCategory.NEUTRAL, 0.5F, (float) (0.4F / (Math.random() * 0.4F + 0.8F)));
 
         if (!world.isClient()) {
             MilkBottleEntity milkBottleEntity = new MilkBottleEntity(world, user);

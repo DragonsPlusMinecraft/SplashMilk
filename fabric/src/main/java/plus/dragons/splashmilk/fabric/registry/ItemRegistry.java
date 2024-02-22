@@ -28,6 +28,6 @@ public class ItemRegistry {
     }
 
     private static void register(Item item, String id) {
-        Registry.register(Registries.ITEM, new Identifier(SplashMilk.MOD_ID, id), item);
+        Registry.register(Registries.ITEM, Identifier.of(SplashMilk.MOD_ID, id), item);
     }
 }
