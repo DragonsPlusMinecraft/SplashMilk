@@ -13,8 +13,6 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.brewing.RegisterBrewingRecipesEvent;
 import plus.dragons.splashmilk.neoforge.SplashMilk;
 
-import java.util.Optional;
-
 @EventBusSubscriber(modid = SplashMilk.MOD_ID)
 public class RecipeRegistry {
     @SubscribeEvent

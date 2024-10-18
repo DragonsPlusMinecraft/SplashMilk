@@ -5,7 +5,7 @@ import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.PotionContentsComponent;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.item.ThrowablePotionItem;
+import net.minecraft.item.PotionItem;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.Potions;
 import net.minecraft.recipe.BrewingRecipeRegistry;
@@ -42,6 +42,7 @@ public class MixinBrewingStandBlockEntity {
                     cir.setReturnValue(true);
             }
         }
+
         if (itemStack.isOf(Items.DRAGON_BREATH)) {
             for (int i = 0; i < 3; ++i) {
                 ItemStack itemStack2 = slots.get(i);
@@ -57,10 +58,14 @@ public class MixinBrewingStandBlockEntity {
         if (itemStack.isOf(Items.MILK_BUCKET)) {
             for (int i = 0; i < 3; ++i) {
                 if (qualifiedWaterBottle(slots.get(i))) {
-                    ItemStack brewed = slots.get(i).isOf(Items.LINGERING_POTION) ?
-                            ItemRegistry.LINGERING_MILK_BOTTLE.getDefaultStack() :
-                            ItemRegistry.SPLASH_MILK_BOTTLE.getDefaultStack();
-                    slots.set(i, brewed);
+                    if(slots.get(i).isOf(Items.POTION)){
+                        slots.set(i, ItemRegistry.MILK_BOTTLE.getDefaultStack());
+                    } else{
+                        ItemStack brewed = slots.get(i).isOf(Items.LINGERING_POTION) ?
+                                ItemRegistry.LINGERING_MILK_BOTTLE.getDefaultStack() :
+                                ItemRegistry.SPLASH_MILK_BOTTLE.getDefaultStack();
+                        slots.set(i, brewed);
+                    }
                 }
             }
             slots.set(3, Items.BUCKET.getDefaultStack());
@@ -84,7 +89,7 @@ public class MixinBrewingStandBlockEntity {
     }
 
     private static boolean qualifiedWaterBottle(ItemStack itemStack) {
-        if (itemStack.getItem() instanceof ThrowablePotionItem) {
+        if (itemStack.getItem() instanceof PotionItem) {
             Optional<RegistryEntry<Potion>> optional = itemStack.getOrDefault(DataComponentTypes.POTION_CONTENTS, PotionContentsComponent.DEFAULT).potion();
             if(optional.isPresent()){
                 var op = optional.get();

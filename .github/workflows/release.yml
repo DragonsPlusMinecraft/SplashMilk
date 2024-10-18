@@ -5,8 +5,8 @@ permissions:
   contents: write
 
 env:
-  MINECRAFT_VERSION: 1.20.4
-  JAVA_VERSION: 17
+  MINECRAFT_VERSION: 1.21.1
+  JAVA_VERSION: 21
   VERSION: 2.1.0
   MODRINTH_ID: ELrdP6OH
   CURSEFORGE_ID: 564244
@@ -24,7 +24,7 @@ jobs:
         uses: actions/setup-java@v2
         with:
           distribution: "temurin"
-          java-version: 17
+          java-version: 21
 
       - name: Make Gradle Wrapper Executable
         if: ${{ runner.os != 'Windows' }}
@@ -56,29 +56,6 @@ jobs:
           retry-attempts: 2
           retry-delay: 10000
 
-      - name: Publish Forge to CurseForge
-        uses: Kir-Antipov/mc-publish@v3.3
-        with:
-          # CurseForge
-          curseforge-id: ${{ env.CURSEFORGE_ID }}
-          curseforge-token: ${{ secrets.CURSEFORGE_TOKEN }}
-
-          # Config
-          name: "[Forge] Splash Milk ${{ env.VERSION }} for ${{ env.MINECRAFT_VERSION }}"
-          version: ${{ env.VERSION }}
-          version-type: release
-          changelog-file: changelog/${{ env.VERSION }}.md
-          files: forge/build/libs/*-${{ env.VERSION }}!(-@(dev|sources|slim|dev-shadow)).jar
-
-          loaders: |
-            forge
-          game-versions: |
-            ${{ env.MINECRAFT_VERSION }}
-          java: |
-            ${{ env.JAVA_VERSION }}
-          retry-attempts: 2
-          retry-delay: 10000
-
       - name: Publish Fabric/Quilt to CurseForge
         uses: Kir-Antipov/mc-publish@v3.3
         with:
@@ -98,9 +75,6 @@ jobs:
             quilt
           game-versions: |
             ${{ env.MINECRAFT_VERSION }}
-          dependencies: |
-            cloth-config(required)
-            modmenu(optional)
           java: |
             ${{ env.JAVA_VERSION }}
           retry-attempts: 2
@@ -130,30 +104,6 @@ jobs:
           retry-attempts: 2
           retry-delay: 10000
 
-      - name: Publish Forge to Modrinth
-        uses: Kir-Antipov/mc-publish@v3.3
-        with:
-          # Modrinth
-          modrinth-id: ${{ env.MODRINTH_ID }}
-          modrinth-featured: true
-          modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
-
-          # Config
-          name: "The Splash Milk ${{ env.VERSION }} for ${{ env.MINECRAFT_VERSION }}"
-          version: ${{ env.VERSION }}
-          version-type: release
-          changelog-file: changelog/${{ env.VERSION }}.md
-          files: forge/build/libs/*-${{ env.VERSION }}!(-@(dev|sources|slim|dev-shadow)).jar
-
-          loaders: |
-            forge
-          game-versions: |
-            ${{ env.MINECRAFT_VERSION }}
-          java: |
-            ${{ env.JAVA_VERSION }}
-          retry-attempts: 2
-          retry-delay: 10000
-
       - name: Publish Fabric/Quilt to Modrinth
         uses: Kir-Antipov/mc-publish@v3.3
         with:
@@ -174,9 +124,6 @@ jobs:
             quilt
           game-versions: |
             ${{ env.MINECRAFT_VERSION }}
-          dependencies: |
-            cloth-config(required)
-            modmenu(optional)
           java: |
             ${{ env.JAVA_VERSION }}
           retry-attempts: 2
