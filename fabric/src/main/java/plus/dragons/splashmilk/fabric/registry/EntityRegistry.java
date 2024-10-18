@@ -1,7 +1,5 @@
 package plus.dragons.splashmilk.fabric.registry;
 
-import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
-import net.minecraft.entity.EntityDimensions;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnGroup;
 import net.minecraft.registry.Registries;
@@ -17,11 +15,11 @@ public class EntityRegistry {
 
     public static void ini() {
         MILK_AREA_EFFECT_CLOUD = Registry.register(Registries.ENTITY_TYPE, Identifier.of(SplashMilk.MOD_ID, "milk_area_effect_cloud"),
-                FabricEntityTypeBuilder.<MIlkAreaEffectCloudEntity>create(SpawnGroup.MISC, MIlkAreaEffectCloudEntity::new)
-                        .dimensions(EntityDimensions.fixed(6.0f, 0.5f)).fireImmune().trackRangeBlocks(10).build());
+                EntityType.Builder.<MIlkAreaEffectCloudEntity>create(MIlkAreaEffectCloudEntity::new,SpawnGroup.MISC)
+                        .dimensions(6.0f, 0.5f).makeFireImmune().trackingTickInterval(10).build());
         MILK_BOTTLE = Registry.register(Registries.ENTITY_TYPE, Identifier.of(SplashMilk.MOD_ID, "milk_bottle"),
-                FabricEntityTypeBuilder.<MilkBottleEntity>create(SpawnGroup.MISC, MilkBottleEntity::new)
-                        .dimensions(EntityDimensions.fixed(0.5f, 0.5f)).fireImmune().trackedUpdateRate(20).trackRangeBlocks(10).build());
+                EntityType.Builder.<MilkBottleEntity>create(MilkBottleEntity::new,SpawnGroup.MISC)
+                        .dimensions(0.5f, 0.5f).makeFireImmune().trackingTickInterval(20).maxTrackingRange(10).build());
 
     }
 }
