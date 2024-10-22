@@ -80,3 +80,25 @@ publishing {
         // Add repositories to publish to here.
     }
 }
+
+publishMods {
+    file = tasks.remapJar.archiveFile
+    changelog = new File("changelog/${mod_version}.md").text
+    version = mod_version
+    type = STABLE
+    displayName = "[Fabric/Quilt] Splash Milk ${mod_version} for ${minecraft_version}"
+    modLoaders.add("fabric")
+    modLoaders.add("quilt")
+
+    curseforge {
+        projectId = "564244"
+        accessToken = providers.environmentVariable("CURSEFORGE_TOKEN")
+        minecraftVersions.add(minecraft_version)
+    }
+
+    modrinth {
+        projectId = "ELrdP6OH"
+        accessToken = providers.environmentVariable("MODRINTH_TOKEN")
+        minecraftVersions.add(minecraft_version)
+    }
+}

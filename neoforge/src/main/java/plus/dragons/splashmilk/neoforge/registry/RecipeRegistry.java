@@ -16,9 +16,13 @@ import plus.dragons.splashmilk.neoforge.SplashMilk;
 @EventBusSubscriber(modid = SplashMilk.MOD_ID)
 public class RecipeRegistry {
     @SubscribeEvent
-    public static void recipeGen(RegisterBrewingRecipesEvent event) {
+    public static void recipe(RegisterBrewingRecipesEvent event) {
         event.getBuilder().addRecipe(Ingredient.ofItems(ItemRegistry.MILK_BOTTLE.get()), Ingredient.ofItems(Items.GUNPOWDER), new ItemStack(ItemRegistry.SPLASH_MILK_BOTTLE.get()));
         event.getBuilder().addRecipe(Ingredient.ofItems(ItemRegistry.SPLASH_MILK_BOTTLE.get()), Ingredient.ofItems(Items.DRAGON_BREATH), new ItemStack(ItemRegistry.LINGERING_MILK_BOTTLE.get()));
+        event.getBuilder().addRecipe(Ingredient.ofStacks(ofPotion(new ItemStack(Items.POTION), Potions.WATER)), Ingredient.ofItems(Items.MILK_BUCKET), new ItemStack(ItemRegistry.MILK_BOTTLE.get()));
+        event.getBuilder().addRecipe(Ingredient.ofStacks(ofPotion(new ItemStack(Items.POTION), Potions.THICK)), Ingredient.ofItems(Items.MILK_BUCKET), new ItemStack(ItemRegistry.MILK_BOTTLE.get()));
+        event.getBuilder().addRecipe(Ingredient.ofStacks(ofPotion(new ItemStack(Items.POTION), Potions.MUNDANE)), Ingredient.ofItems(Items.MILK_BUCKET), new ItemStack(ItemRegistry.MILK_BOTTLE.get()));
+        event.getBuilder().addRecipe(Ingredient.ofStacks(ofPotion(new ItemStack(Items.POTION), Potions.AWKWARD)), Ingredient.ofItems(Items.MILK_BUCKET), new ItemStack(ItemRegistry.MILK_BOTTLE.get()));
         event.getBuilder().addRecipe(Ingredient.ofStacks(ofPotion(new ItemStack(Items.SPLASH_POTION), Potions.WATER)), Ingredient.ofItems(Items.MILK_BUCKET), new ItemStack(ItemRegistry.SPLASH_MILK_BOTTLE.get()));
         event.getBuilder().addRecipe(Ingredient.ofStacks(ofPotion(new ItemStack(Items.LINGERING_POTION), Potions.WATER)), Ingredient.ofItems(Items.MILK_BUCKET), new ItemStack(ItemRegistry.LINGERING_MILK_BOTTLE.get()));
         event.getBuilder().addRecipe(Ingredient.ofStacks(ofPotion(new ItemStack(Items.SPLASH_POTION), Potions.MUNDANE)), Ingredient.ofItems(Items.MILK_BUCKET), new ItemStack(ItemRegistry.SPLASH_MILK_BOTTLE.get()));
