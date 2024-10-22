@@ -83,7 +83,7 @@ publishing {
 
 publishMods {
     file = tasks.remapJar.archiveFile
-    changelog = new File("changelog/${mod_version}.md").text
+    changelog = rootProject.file("changelog/${mod_version}.md").text
     version = mod_version
     type = STABLE
     displayName = "[Fabric/Quilt] Splash Milk ${mod_version} for ${minecraft_version}"
