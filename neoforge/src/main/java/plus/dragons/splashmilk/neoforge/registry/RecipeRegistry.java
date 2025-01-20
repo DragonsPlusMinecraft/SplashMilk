@@ -27,8 +27,7 @@ public class RecipeRegistry {
         public boolean isInput(ItemStack arg) {
             if(arg.isOf(Items.POTION)||arg.isOf(Items.SPLASH_POTION)||arg.isOf(Items.LINGERING_POTION)){
                 PotionContentsComponent p = arg.get(DataComponentTypes.POTION_CONTENTS);
-                if(p.matches(Potions.WATER)||p.matches(Potions.THICK)||p.matches(Potions.MUNDANE)||p.matches(Potions.AWKWARD))
-                    return true;
+                return p.matches(Potions.WATER) || p.matches(Potions.THICK) || p.matches(Potions.MUNDANE) || p.matches(Potions.AWKWARD);
             }
             return false;
         }

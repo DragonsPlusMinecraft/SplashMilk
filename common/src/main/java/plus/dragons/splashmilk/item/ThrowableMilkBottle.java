@@ -1,20 +1,25 @@
 package plus.dragons.splashmilk.item;
 
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.projectile.ProjectileEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.ProjectileItem;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.RegistryKey;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.math.Direction;
+import net.minecraft.util.math.Position;
 import net.minecraft.world.World;
 import plus.dragons.splashmilk.PlatformUtil;
 import plus.dragons.splashmilk.entity.MilkBottleEntity;
 
-public class ThrowableMilkBottle extends Item {
+public class ThrowableMilkBottle extends Item implements ProjectileItem {
     public ThrowableMilkBottle(String id) {
         super(PlatformUtil.milkBottleSetting().registryKey(RegistryKey.of(Registries.ITEM.getKey(), Identifier.of("splash_milk",id))));
     }
@@ -28,16 +33,16 @@ public class ThrowableMilkBottle extends Item {
                 SoundCategory.NEUTRAL, 0.5F, (float) (0.4F / (Math.random() * 0.4F + 0.8F)));
 
         if (!world.isClient()) {
-            MilkBottleEntity milkBottleEntity = new MilkBottleEntity(world, user);
-            milkBottleEntity.setItem(itemstack);
-            milkBottleEntity.setVelocity(user, user.getPitch(), user.getYaw(), -20.0F, 0.5F, 1.0F);
-            world.spawnEntity(milkBottleEntity);
+            ProjectileEntity.spawnWithVelocity(MilkBottleEntity::new, (ServerWorld) world, itemstack, user, -20.0F, 0.5F, 1.0F);
         }
 
-        if (!user.getAbilities().creativeMode) {
-            itemstack.decrement(1);
-        }
+        itemstack.decrementUnlessCreative(1, user);
 
-        return ActionResult.SUCCESS_SERVER;
+        return ActionResult.SUCCESS;
+    }
+
+    @Override
+    public ProjectileEntity createEntity(World world, Position pos, ItemStack stack, Direction direction) {
+        return new MilkBottleEntity(world, pos.getX(), pos.getY(), pos.getZ(), stack);
     }
 }

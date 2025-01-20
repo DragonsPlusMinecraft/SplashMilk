@@ -5,10 +5,10 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.CampfireBlock;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
-import net.minecraft.entity.FlyingItemEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.projectile.thrown.ThrownItemEntity;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.registry.tag.BlockTags;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.hit.BlockHitResult;
@@ -22,16 +22,19 @@ import plus.dragons.splashmilk.PlatformUtil;
 import java.util.List;
 import java.util.function.Predicate;
 
-public class MilkBottleEntity extends ThrownItemEntity implements FlyingItemEntity {
+public class MilkBottleEntity extends ThrownItemEntity {
     public static final Predicate<LivingEntity> WATER_SENSITIVE = LivingEntity::hurtByWater;
 
     public MilkBottleEntity(EntityType<? extends MilkBottleEntity> entityType, World world) {
         super(entityType, world);
     }
 
-    public MilkBottleEntity(World world, LivingEntity livingEntity) {
-        super(PlatformUtil.getMIlkBottleEntityType().get(), world);
-        setOwner(livingEntity);
+    public MilkBottleEntity(World world, LivingEntity livingEntity, ItemStack itemStack) {
+        super(PlatformUtil.getMIlkBottleEntityType().get(), livingEntity, world, itemStack);
+    }
+
+    public MilkBottleEntity(World world, double x, double y, double z, ItemStack stack) {
+        super(PlatformUtil.getMIlkBottleEntityType().get(), x, y, z, world, stack);
     }
 
     @Override
