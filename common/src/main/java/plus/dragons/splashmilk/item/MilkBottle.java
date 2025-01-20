@@ -6,19 +6,22 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUsage;
 import net.minecraft.item.Items;
+import net.minecraft.item.consume.UseAction;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.RegistryKey;
+import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
-import net.minecraft.util.TypedActionResult;
-import net.minecraft.util.UseAction;
+import net.minecraft.util.Identifier;
 import net.minecraft.world.World;
 import plus.dragons.splashmilk.PlatformUtil;
 
 public class MilkBottle extends Item {
     public MilkBottle() {
-        super(PlatformUtil.milkBottleSetting());
+        super(PlatformUtil.milkBottleSetting().registryKey(RegistryKey.of(Registries.ITEM.getKey(), Identifier.of("splash_milk","milk_bottle"))));
     }
 
     @Override
-    public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
+    public ActionResult use(World world, PlayerEntity user, Hand hand) {
         return ItemUsage.consumeHeldItem(world, user, hand);
     }
 

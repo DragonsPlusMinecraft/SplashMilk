@@ -14,8 +14,8 @@ import java.util.function.Supplier;
 public class ItemRegistry {
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(Registries.ITEM, SplashMilk.MOD_ID);
     public static final Supplier<Item> MILK_BOTTLE = ITEMS.register("milk_bottle", MilkBottle::new);
-    public static final Supplier<Item> SPLASH_MILK_BOTTLE = ITEMS.register("splash_milk_bottle", ThrowableMilkBottle::new);
-    public static final Supplier<Item> LINGERING_MILK_BOTTLE = ITEMS.register("lingering_milk_bottle", ThrowableMilkBottle::new);
+    public static final Supplier<Item> SPLASH_MILK_BOTTLE = ITEMS.register("splash_milk_bottle", ()-> new ThrowableMilkBottle("splash_milk_bottle"));
+    public static final Supplier<Item> LINGERING_MILK_BOTTLE = ITEMS.register("lingering_milk_bottle", ()->new ThrowableMilkBottle("lingering_milk_bottle"));
 
     public static void addToCreativeTab(BuildCreativeModeTabContentsEvent event) {
         if (event.getTab() == Registries.ITEM_GROUP.get(ItemGroups.FOOD_AND_DRINK)) {

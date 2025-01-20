@@ -3,6 +3,7 @@ package plus.dragons.splashmilk.entity;
 import com.google.common.collect.Maps;
 import net.minecraft.block.piston.PistonBehavior;
 import net.minecraft.entity.*;
+import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.data.DataTracker;
 import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
@@ -94,6 +95,11 @@ public class MIlkAreaEffectCloudEntity extends Entity {
 
         }
 
+    }
+
+    @Override
+    public boolean damage(ServerWorld world, DamageSource source, float amount) {
+        return false;
     }
 
     private void handleLifecycle(float radius) {

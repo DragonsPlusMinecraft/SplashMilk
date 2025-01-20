@@ -10,6 +10,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.projectile.thrown.ThrownItemEntity;
 import net.minecraft.item.Item;
 import net.minecraft.registry.tag.BlockTags;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.BlockPos;
@@ -29,7 +30,8 @@ public class MilkBottleEntity extends ThrownItemEntity implements FlyingItemEnti
     }
 
     public MilkBottleEntity(World world, LivingEntity livingEntity) {
-        super(PlatformUtil.getMIlkBottleEntityType().get(), livingEntity, world);
+        super(PlatformUtil.getMIlkBottleEntityType().get(), world);
+        setOwner(livingEntity);
     }
 
     @Override
@@ -80,7 +82,7 @@ public class MilkBottleEntity extends ThrownItemEntity implements FlyingItemEnti
             for (LivingEntity livingentity : list) {
                 double d0 = squaredDistanceTo(livingentity);
                 if (d0 < 16.0D && livingentity.hurtByWater()) {
-                    livingentity.damage(getDamageSources().indirectMagic(this, getOwner()), 1.0F);
+                    livingentity.damage((ServerWorld) getWorld(),getDamageSources().indirectMagic(this, getOwner()), 1.0F);
                 }
             }
         }

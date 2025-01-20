@@ -12,8 +12,8 @@ import plus.dragons.splashmilk.item.ThrowableMilkBottle;
 
 public class ItemRegistry {
     public static final Item MILK_BOTTLE = new MilkBottle();
-    public static final Item SPLASH_MILK_BOTTLE = new ThrowableMilkBottle();
-    public static final Item LINGERING_MILK_BOTTLE = new ThrowableMilkBottle();
+    public static final Item SPLASH_MILK_BOTTLE = new ThrowableMilkBottle("splash_milk_bottle");
+    public static final Item LINGERING_MILK_BOTTLE = new ThrowableMilkBottle("lingering_milk_bottle");
 
     public static void ini() {
         register(MILK_BOTTLE, "milk_bottle");

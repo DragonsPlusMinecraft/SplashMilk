@@ -3,21 +3,24 @@ package plus.dragons.splashmilk.item;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.RegistryKey;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
+import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
-import net.minecraft.util.TypedActionResult;
+import net.minecraft.util.Identifier;
 import net.minecraft.world.World;
 import plus.dragons.splashmilk.PlatformUtil;
 import plus.dragons.splashmilk.entity.MilkBottleEntity;
 
 public class ThrowableMilkBottle extends Item {
-    public ThrowableMilkBottle() {
-        super(PlatformUtil.milkBottleSetting());
+    public ThrowableMilkBottle(String id) {
+        super(PlatformUtil.milkBottleSetting().registryKey(RegistryKey.of(Registries.ITEM.getKey(), Identifier.of("splash_milk",id))));
     }
 
     @Override
-    public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
+    public ActionResult use(World world, PlayerEntity user, Hand hand) {
         ItemStack itemstack = user.getStackInHand(hand);
         boolean isLingering = itemstack.getItem().equals(PlatformUtil.getLingerMIlkBottleItem().get());
         world.playSound(null, user.getX(), user.getY(), user.getZ(),
@@ -35,6 +38,6 @@ public class ThrowableMilkBottle extends Item {
             itemstack.decrement(1);
         }
 
-        return TypedActionResult.success(itemstack, world.isClient());
+        return ActionResult.SUCCESS_SERVER;
     }
 }
