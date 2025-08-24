@@ -67,7 +67,7 @@ remapJar {
 
 publishMods {
     file = tasks.remapJar.archiveFile
-    changelog = rootProject.file("changelog/${mod_version}.md").text
+    changelog = rootProject.file("CHANGELOG.md").text
     version = mod_version
     type = STABLE
     displayName = "[NeoForge] Splash Milk ${mod_version} for ${minecraft_version}"
