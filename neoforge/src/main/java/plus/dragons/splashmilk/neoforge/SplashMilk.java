@@ -8,7 +8,11 @@ import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
+import net.neoforged.neoforge.capabilities.Capabilities;
+import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
+import net.neoforged.neoforge.fluids.capability.templates.FluidHandlerItemStackSimple;
+import plus.dragons.splashmilk.neoforge.registry.DataComponentRegistry;
 import plus.dragons.splashmilk.neoforge.registry.EntityRegistry;
 import plus.dragons.splashmilk.neoforge.registry.ItemRegistry;
 import plus.dragons.splashmilk.neoforge.registry.ParticleTypeRegistry;
@@ -22,8 +26,10 @@ public class SplashMilk {
         ItemRegistry.ITEMS.register(modEventbus);
         EntityRegistry.ENTITIES.register(modEventbus);
         ParticleTypeRegistry.PARTICLE_TYPES.register(modEventbus);
+        DataComponentRegistry.DATA_COMPONENT_TYPES.register(modEventbus);
 
         modEventbus.addListener(ItemRegistry::addToCreativeTab);
+        modEventbus.addListener(SplashMilk::registerCapabilities);
     }
 
     @SubscribeEvent
@@ -37,6 +43,14 @@ public class SplashMilk {
                 event.getEntity().giveItemStack(ItemRegistry.MILK_BOTTLE.get().getDefaultStack());
             }
         }
+    }
+
+    public static void registerCapabilities(RegisterCapabilitiesEvent event) {
+        event.registerItem(
+                Capabilities.FluidHandler.ITEM,
+                (itemStack, context) -> new FluidHandlerItemStackSimple.SwapEmpty(DataComponentRegistry.MILK, itemStack, Items.GLASS_BOTTLE.getDefaultStack(), 333),
+                ItemRegistry.MILK_BOTTLE.get()
+        );
     }
 
 }
