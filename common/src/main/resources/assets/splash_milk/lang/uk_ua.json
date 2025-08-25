@@ -1,0 +1,8 @@
+{
+  "item.splash_milk.milk_bottle": "Пляшка молока",
+  "item.splash_milk.splash_milk_bottle": "Вибухова пляшка молока",
+  "item.splash_milk.lingering_milk_bottle": "Осідальна пляшка молока",
+  "entity.splash_milk.milk_area_effect_cloud": "Хмара з ефектом молока",
+  "entity.splash_milk.milk_bottle": "Пляшка молока",
+  "modmenu.descriptionTranslation.splash_milk": "Пляшки молока, яких не вистачало"
+}
