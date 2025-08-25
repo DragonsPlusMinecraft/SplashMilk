@@ -1,42 +1,43 @@
 plugins {
-    id "architectury-plugin" version "3.4-SNAPSHOT"
-    id "dev.architectury.loom" version "1.7-SNAPSHOT" apply false
-    id 'com.github.johnrengelman.shadow' version '8.1.1' apply false
-    id "me.modmuss50.mod-publish-plugin" version "0.7.4"
+    id 'dev.architectury.loom' version '1.11-SNAPSHOT' apply false
+    id 'architectury-plugin' version '3.4-SNAPSHOT'
+    id 'com.gradleup.shadow' version '8.3.6' apply false
+    id "me.modmuss50.mod-publish-plugin" version "0.8.4"
 }
 
 architectury {
-    minecraft = rootProject.minecraft_version
+    minecraft = project.minecraft_version
 }
 
 allprojects {
-
-
-    version = rootProject.mod_version
     group = rootProject.maven_group
+    version = rootProject.mod_version
 }
 
 subprojects {
-    apply plugin: "dev.architectury.loom"
-    apply plugin: "architectury-plugin"
-    apply plugin: "maven-publish"
+    apply plugin: 'dev.architectury.loom'
+    apply plugin: 'architectury-plugin'
+    apply plugin: 'maven-publish'
 
     base {
         // Set up a suffixed format for the mod jar names, e.g. `example-fabric`.
-        archivesName = "$rootProject.name-$project.name"
+        archivesName = "$rootProject.archives_name-$project.name"
+    }
+
+    repositories {
+        // Add repositories to retrieve artifacts from in here.
+        // You should only use this when depending on other mods because
+        // Loom adds the essential maven repositories to download Minecraft and libraries from automatically.
+        // See https://docs.gradle.org/current/userguide/declaring_repositories.html
+        // for more information about repositories.
     }
 
     dependencies {
-        minecraft "com.mojang:minecraft:${rootProject.minecraft_version}"
+        minecraft "net.minecraft:minecraft:$rootProject.minecraft_version"
         mappings loom.layered {
             it.mappings("net.fabricmc:yarn:$rootProject.yarn_mappings:v2")
             it.mappings("dev.architectury:yarn-mappings-patch-neoforge:$rootProject.yarn_mappings_patch_neoforge_version")
         }
-    }
-
-    tasks.withType(JavaCompile) {
-        options.encoding = "UTF-8"
-        options.release = 21
     }
 
     java {
@@ -48,5 +49,71 @@ subprojects {
         sourceCompatibility = JavaVersion.VERSION_21
         targetCompatibility = JavaVersion.VERSION_21
     }
-}
 
+    tasks.withType(JavaCompile).configureEach {
+        it.options.release = 21
+    }
+
+    // Configure Maven publishing.
+    publishing {
+        publications {
+            mavenJava(MavenPublication) {
+                artifactId = base.archivesName.get()
+                from components.java
+            }
+        }
+
+        repositories {
+            // Add repositories to publish to here.
+            // Notice: This block does NOT have the same function as the block in the top level.
+            // The repositories here will be used for publishing your artifact, not for
+            // retrieving dependencies.
+        }
+    }
+
+    publishMods {
+        changelog = rootProject.file("CHANGELOG.md").text
+        version = mod_version
+        type = STABLE
+
+        def CFOption = curseforgeOptions {
+            accessToken = providers.environmentVariable("CURSEFORGE_TOKEN")
+            projectId = "564244"
+            minecraftVersions.add(minecraft_version)
+        }
+
+        def MROption = modrinthOptions {
+            accessToken = providers.environmentVariable("MODRINTH_TOKEN")
+            projectId = "ELrdP6OH"
+            minecraftVersions.add(minecraft_version)
+        }
+
+        curseforge("CFFabric") {
+            from CFOption
+            file project(":fabric")
+            modLoaders.add("fabric")
+            displayName = "[Fabric] Splash Milk ${mod_version} for ${minecraft_version}"
+        }
+
+        curseforge("CFNeoForge") {
+            from CFOption
+            file project(":neoforge")
+            displayName = "[NeoForge] Splash Milk ${mod_version} for ${minecraft_version}"
+            modLoaders.add("neoforge")
+        }
+
+        modrinth("MRFabric") {
+            from MROption
+            file project(":fabric")
+            displayName = "[Fabric] Splash Milk ${mod_version} for ${minecraft_version}"
+            modLoaders.add("fabric")
+        }
+
+        modrinth("MRNeoForge") {
+            from MROption
+            file project(":neoforge")
+            displayName = "[NeoForge] Splash Milk ${mod_version} for ${minecraft_version}"
+            modLoaders.add("neoforge")
+        }
+    }
+}

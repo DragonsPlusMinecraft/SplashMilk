@@ -9,6 +9,7 @@ import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.util.Uuids;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
@@ -139,7 +140,7 @@ public class MIlkAreaEffectCloudEntity extends Entity {
                     float f2 = MathHelper.sqrt(random.nextFloat()) * 0.2F;
                     float f3 = MathHelper.cos(f1) * f2;
                     float f4 = MathHelper.sin(f1) * f2;
-                    getWorld().addImportantParticle(PlatformUtil.getMilkCloudParticle().get(), getX() + (double) f3, getY(), getZ() + (double) f4, 0.98, 0.99, 1);
+                    getWorld().addImportantParticleClient(PlatformUtil.getMilkCloudParticle().get(), getX() + (double) f3, getY(), getZ() + (double) f4, 0.98, 0.99, 1);
                 }
             }
         } else {
@@ -149,7 +150,7 @@ public class MIlkAreaEffectCloudEntity extends Entity {
                 float f7 = MathHelper.sqrt(random.nextFloat()) * radius;
                 float f8 = MathHelper.cos(f6) * f7;
                 float f9 = MathHelper.sin(f6) * f7;
-                getWorld().addImportantParticle(PlatformUtil.getMilkCloudParticle().get(), getX() + (double) f8, getY(), getZ() + (double) f9, 0.98, 0.99, 1);
+                getWorld().addImportantParticleClient(PlatformUtil.getMilkCloudParticle().get(), getX() + (double) f8, getY(), getZ() + (double) f9, 0.98, 0.99, 1);
             }
         }
     }
@@ -189,17 +190,15 @@ public class MIlkAreaEffectCloudEntity extends Entity {
 
     @Override
     protected void readCustomDataFromNbt(NbtCompound nbt) {
-        age = nbt.getInt("Age");
-        duration = nbt.getInt("Duration");
-        waitTime = nbt.getInt("WaitTime");
-        reapplicationDelay = nbt.getInt("ReapplicationDelay");
-        durationOnUse = nbt.getInt("DurationOnUse");
-        radiusOnUse = nbt.getFloat("RadiusOnUse");
-        radiusPerTick = nbt.getFloat("RadiusPerTick");
-        setRadius(nbt.getFloat("Radius"));
-        if (nbt.containsUuid("Owner")) {
-            ownerUUID = nbt.getUuid("Owner");
-        }
+        age = nbt.getInt("Age",0);
+        duration = nbt.getInt("Duration",-1);
+        waitTime = nbt.getInt("WaitTime",20);
+        reapplicationDelay = nbt.getInt("ReapplicationDelay",20);
+        durationOnUse = nbt.getInt("DurationOnUse",0);
+        radiusOnUse = nbt.getFloat("RadiusOnUse",0);
+        radiusPerTick = nbt.getFloat("RadiusPerTick",0);
+        setRadius(nbt.getFloat("Radius",3.0F));
+        ownerUUID = nbt.get("Owner", Uuids.INT_STREAM_CODEC).orElse(null);
     }
 
     @Override
@@ -212,9 +211,7 @@ public class MIlkAreaEffectCloudEntity extends Entity {
         nbt.putFloat("RadiusOnUse", radiusOnUse);
         nbt.putFloat("RadiusPerTick", radiusPerTick);
         nbt.putFloat("Radius", getRadius());
-        if (ownerUUID != null) {
-            nbt.putUuid("Owner", ownerUUID);
-        }
+        nbt.putNullable("Owner", Uuids.INT_STREAM_CODEC, ownerUUID);
     }
 
     public void setRadiusOnUse(float radiusOnUse) {
