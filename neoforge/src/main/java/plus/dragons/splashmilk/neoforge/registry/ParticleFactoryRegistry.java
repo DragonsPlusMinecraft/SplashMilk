@@ -7,7 +7,7 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.RegisterParticleProvidersEvent;
 import plus.dragons.splashmilk.neoforge.SplashMilk;
 
-@EventBusSubscriber(value = Dist.CLIENT, modid = SplashMilk.MOD_ID)
+@EventBusSubscriber(value = Dist.CLIENT, modid = SplashMilk.MOD_ID, bus = EventBusSubscriber.Bus.MOD)
 public class ParticleFactoryRegistry {
     @SubscribeEvent
     public static void onParticleProviderRegistration(RegisterParticleProvidersEvent event) {

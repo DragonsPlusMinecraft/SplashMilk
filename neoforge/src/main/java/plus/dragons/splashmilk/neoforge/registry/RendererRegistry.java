@@ -9,7 +9,7 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import plus.dragons.splashmilk.neoforge.SplashMilk;
 
-@EventBusSubscriber(modid = SplashMilk.MOD_ID, value = Dist.CLIENT)
+@EventBusSubscriber(modid = SplashMilk.MOD_ID, value = Dist.CLIENT, bus = EventBusSubscriber.Bus.MOD)
 public class RendererRegistry {
 
     @OnlyIn(Dist.CLIENT)

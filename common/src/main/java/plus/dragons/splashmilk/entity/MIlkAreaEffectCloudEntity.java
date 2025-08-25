@@ -7,9 +7,9 @@ import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.data.DataTracker;
 import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
-import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.Uuids;
+import net.minecraft.storage.ReadView;
+import net.minecraft.storage.WriteView;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
@@ -17,7 +17,6 @@ import plus.dragons.splashmilk.PlatformUtil;
 
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 
 public class MIlkAreaEffectCloudEntity extends Entity {
@@ -30,8 +29,8 @@ public class MIlkAreaEffectCloudEntity extends Entity {
     private int durationOnUse;
     private float radiusOnUse;
     private float radiusPerTick;
-    private LivingEntity owner;
-    private UUID ownerUUID;
+    @Nullable
+    private LazyEntityReference<LivingEntity> owner;
 
     public MIlkAreaEffectCloudEntity(EntityType<? extends MIlkAreaEffectCloudEntity> entityType, World world) {
         super(entityType, world);
@@ -189,29 +188,29 @@ public class MIlkAreaEffectCloudEntity extends Entity {
     }
 
     @Override
-    protected void readCustomDataFromNbt(NbtCompound nbt) {
-        age = nbt.getInt("Age",0);
-        duration = nbt.getInt("Duration",-1);
-        waitTime = nbt.getInt("WaitTime",20);
-        reapplicationDelay = nbt.getInt("ReapplicationDelay",20);
-        durationOnUse = nbt.getInt("DurationOnUse",0);
-        radiusOnUse = nbt.getFloat("RadiusOnUse",0);
-        radiusPerTick = nbt.getFloat("RadiusPerTick",0);
-        setRadius(nbt.getFloat("Radius",3.0F));
-        ownerUUID = nbt.get("Owner", Uuids.INT_STREAM_CODEC).orElse(null);
+    protected void readCustomData(ReadView view) {
+        age = view.getInt("Age",0);
+        duration = view.getInt("Duration",-1);
+        waitTime = view.getInt("WaitTime",20);
+        reapplicationDelay = view.getInt("ReapplicationDelay",20);
+        durationOnUse = view.getInt("DurationOnUse",0);
+        radiusOnUse = view.getFloat("RadiusOnUse",0);
+        radiusPerTick = view.getFloat("RadiusPerTick",0);
+        setRadius(view.getFloat("Radius",3.0F));
+        this.owner = LazyEntityReference.fromData(view, "Owner");
     }
 
     @Override
-    protected void writeCustomDataToNbt(NbtCompound nbt) {
-        nbt.putInt("Age", age);
-        nbt.putInt("Duration", duration);
-        nbt.putInt("WaitTime", waitTime);
-        nbt.putInt("ReapplicationDelay", reapplicationDelay);
-        nbt.putInt("DurationOnUse", durationOnUse);
-        nbt.putFloat("RadiusOnUse", radiusOnUse);
-        nbt.putFloat("RadiusPerTick", radiusPerTick);
-        nbt.putFloat("Radius", getRadius());
-        nbt.putNullable("Owner", Uuids.INT_STREAM_CODEC, ownerUUID);
+    protected void writeCustomData(WriteView view) {
+        view.putInt("Age", age);
+        view.putInt("Duration", duration);
+        view.putInt("WaitTime", waitTime);
+        view.putInt("ReapplicationDelay", reapplicationDelay);
+        view.putInt("DurationOnUse", durationOnUse);
+        view.putFloat("RadiusOnUse", radiusOnUse);
+        view.putFloat("RadiusPerTick", radiusPerTick);
+        view.putFloat("Radius", getRadius());
+        LazyEntityReference.writeData(this.owner, view, "Owner");
     }
 
     public void setRadiusOnUse(float radiusOnUse) {
@@ -228,18 +227,11 @@ public class MIlkAreaEffectCloudEntity extends Entity {
 
     @Nullable
     public LivingEntity getOwner() {
-        if (owner == null && ownerUUID != null && getWorld() instanceof ServerWorld) {
-            Entity entity = ((ServerWorld) getWorld()).getEntity(ownerUUID);
-            if (entity instanceof LivingEntity) {
-                owner = (LivingEntity) entity;
-            }
-        }
-        return owner;
+        return (LivingEntity)LazyEntityReference.resolve(this.owner, this.getWorld(), LivingEntity.class);
     }
 
-    public void setOwner(@Nullable LivingEntity livingEntity) {
-        owner = livingEntity;
-        ownerUUID = livingEntity == null ? null : livingEntity.getUuid();
+    public void setOwner(@Nullable LivingEntity owner) {
+        this.owner = owner != null ? new LazyEntityReference<>(owner) : null;
     }
 
     @Override
