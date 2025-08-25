@@ -88,32 +88,31 @@ subprojects {
             minecraftVersions.add(minecraft_version)
         }
 
+        def createOptions = (String projectName) -> {
+            publishOptions {
+                file = project.provider { project(":$projectName").tasks.remapJar }.flatMap { it.archiveFile }
+                displayName = "[${projectName.toUpperCase()}] Splash Milk ${mod_version} for ${minecraft_version}"
+                modLoaders.add(projectName.toLowerCase())
+            }
+        }
+
+        def FabricOptions = createOptions("fabric")
+        def NeoForgeOptions = createOptions("neoforge")
+
         curseforge("CFFabric") {
-            from CFOption
-            file project(":fabric")
-            modLoaders.add("fabric")
-            displayName = "[Fabric] Splash Milk ${mod_version} for ${minecraft_version}"
+            from (CFOption,FabricOptions)
         }
 
         curseforge("CFNeoForge") {
-            from CFOption
-            file project(":neoforge")
-            displayName = "[NeoForge] Splash Milk ${mod_version} for ${minecraft_version}"
-            modLoaders.add("neoforge")
+            from (CFOption,NeoForgeOptions)
         }
 
         modrinth("MRFabric") {
-            from MROption
-            file project(":fabric")
-            displayName = "[Fabric] Splash Milk ${mod_version} for ${minecraft_version}"
-            modLoaders.add("fabric")
+            from (MROption,FabricOptions)
         }
 
         modrinth("MRNeoForge") {
-            from MROption
-            file project(":neoforge")
-            displayName = "[NeoForge] Splash Milk ${mod_version} for ${minecraft_version}"
-            modLoaders.add("neoforge")
+            from (MROption,NeoForgeOptions)
         }
     }
 }
