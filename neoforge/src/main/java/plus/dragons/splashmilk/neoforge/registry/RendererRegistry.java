@@ -9,10 +9,9 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import plus.dragons.splashmilk.neoforge.SplashMilk;
 
-@EventBusSubscriber(modid = SplashMilk.MOD_ID, value = Dist.CLIENT, bus = EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber(modid = SplashMilk.MOD_ID, value = Dist.CLIENT)
 public class RendererRegistry {
 
-    @OnlyIn(Dist.CLIENT)
     @SubscribeEvent
     public static void onClientSetUpEvent(EntityRenderersEvent.RegisterRenderers event) {
         event.registerEntityRenderer(EntityRegistry.MILK_AREA_EFFECT_CLOUD.get(), EmptyEntityRenderer::new);
