@@ -1,6 +1,6 @@
 package plus.dragons.splashmilk.fabric.registry;
 
-import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
+import net.fabricmc.fabric.api.creativetab.v1.CreativeModeTabEvents;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
@@ -20,7 +20,7 @@ public class ItemRegistry {
         register(SPLASH_MILK_BOTTLE, "splash_milk_bottle");
         register(LINGERING_MILK_BOTTLE, "lingering_milk_bottle");
 
-        ItemGroupEvents.modifyEntriesEvent(CreativeModeTabs.FOOD_AND_DRINKS).register(entries -> {
+        CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.FOOD_AND_DRINKS).register(entries -> {
             entries.accept(MILK_BOTTLE);
             entries.accept(SPLASH_MILK_BOTTLE);
             entries.accept(LINGERING_MILK_BOTTLE);
