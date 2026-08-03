@@ -1,9 +1,9 @@
 package plus.dragons.splashmilk.neoforge;
 
-import net.minecraft.entity.passive.CowEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.util.Hand;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.animal.cow.Cow;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -11,7 +11,9 @@ import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
-import net.neoforged.neoforge.fluids.capability.templates.FluidHandlerItemStackSimple;
+import net.neoforged.neoforge.transfer.fluid.FluidResource;
+import net.neoforged.neoforge.transfer.fluid.ItemAccessFluidHandler;
+import net.neoforged.neoforge.transfer.item.ItemResource;
 import plus.dragons.splashmilk.neoforge.registry.DataComponentRegistry;
 import plus.dragons.splashmilk.neoforge.registry.EntityRegistry;
 import plus.dragons.splashmilk.neoforge.registry.ItemRegistry;
@@ -34,21 +36,32 @@ public class SplashMilk {
 
     @SubscribeEvent
     private static void milking(PlayerInteractEvent.EntityInteract event){
-        if(event.getEntity().getWorld().isClient()) return;
-        if(event.getTarget() instanceof CowEntity && event.getTarget().isAlive()){
-            Hand hand = event.getHand();
-            ItemStack itemStack = event.getEntity().getStackInHand(hand);
-            if(itemStack.isOf(Items.GLASS_BOTTLE)){
-                itemStack.decrement(1);
-                event.getEntity().giveItemStack(ItemRegistry.MILK_BOTTLE.get().getDefaultStack());
+        if(event.getEntity().level().isClientSide()) return;
+        if(event.getTarget() instanceof Cow && event.getTarget().isAlive()){
+            InteractionHand hand = event.getHand();
+            ItemStack itemStack = event.getEntity().getItemInHand(hand);
+            if(itemStack.is(Items.GLASS_BOTTLE)){
+                itemStack.shrink(1);
+                event.getEntity().addItem(ItemRegistry.MILK_BOTTLE.get().getDefaultInstance());
             }
         }
     }
 
     public static void registerCapabilities(RegisterCapabilitiesEvent event) {
         event.registerItem(
-                Capabilities.FluidHandler.ITEM,
-                (itemStack, context) -> new FluidHandlerItemStackSimple.SwapEmpty(DataComponentRegistry.MILK, itemStack, Items.GLASS_BOTTLE.getDefaultStack(), 333),
+                Capabilities.Fluid.ITEM,
+                (itemStack, context) -> new ItemAccessFluidHandler(context, DataComponentRegistry.MILK.get(), 333) {
+                    @Override
+                    protected ItemResource update(ItemResource currentItem, int index, FluidResource fluid, int amount) {
+                        if (amount == 0) {
+                            return ItemResource.of(Items.GLASS_BOTTLE);
+                        }
+                        if (amount != capacity) {
+                            return ItemResource.EMPTY;
+                        }
+                        return super.update(currentItem, index, fluid, amount);
+                    }
+                },
                 ItemRegistry.MILK_BOTTLE.get()
         );
     }

@@ -1,17 +1,17 @@
 package plus.dragons.splashmilk;
 
 import dev.architectury.injectables.annotations.ExpectPlatform;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.projectile.thrown.ThrownItemEntity;
-import net.minecraft.item.Item;
-import net.minecraft.particle.ParticleEffect;
 import plus.dragons.splashmilk.entity.MIlkAreaEffectCloudEntity;
 
 import java.util.function.Supplier;
+import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.projectile.throwableitemprojectile.ThrowableItemProjectile;
+import net.minecraft.world.item.Item;
 
 public class PlatformUtil {
     @ExpectPlatform
-    public static Item.Settings milkBottleSetting() {
+    public static Item.Properties milkBottleSetting() {
         throw new RuntimeException();
     }
 
@@ -26,7 +26,7 @@ public class PlatformUtil {
     }
 
     @ExpectPlatform
-    public static Supplier<EntityType<? extends ThrownItemEntity>> getMIlkBottleEntityType() {
+    public static Supplier<EntityType<? extends ThrowableItemProjectile>> getMIlkBottleEntityType() {
         throw new RuntimeException();
     }
 
@@ -36,7 +36,7 @@ public class PlatformUtil {
     }
 
     @ExpectPlatform
-    public static Supplier<? extends ParticleEffect> getMilkCloudParticle() {
+    public static Supplier<? extends ParticleOptions> getMilkCloudParticle() {
         throw new RuntimeException();
     }
 

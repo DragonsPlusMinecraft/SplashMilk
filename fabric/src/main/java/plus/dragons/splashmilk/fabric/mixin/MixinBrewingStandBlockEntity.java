@@ -1,18 +1,5 @@
 package plus.dragons.splashmilk.fabric.mixin;
 
-import net.minecraft.block.entity.BrewingStandBlockEntity;
-import net.minecraft.component.DataComponentTypes;
-import net.minecraft.component.type.PotionContentsComponent;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.item.PotionItem;
-import net.minecraft.potion.Potion;
-import net.minecraft.potion.Potions;
-import net.minecraft.recipe.BrewingRecipeRegistry;
-import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.util.collection.DefaultedList;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -21,76 +8,89 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import plus.dragons.splashmilk.fabric.registry.ItemRegistry;
 
 import java.util.Optional;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
+import net.minecraft.core.NonNullList;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.PotionItem;
+import net.minecraft.world.item.alchemy.Potion;
+import net.minecraft.world.item.alchemy.PotionBrewing;
+import net.minecraft.world.item.alchemy.PotionContents;
+import net.minecraft.world.item.alchemy.Potions;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BrewingStandBlockEntity;
 
 
 @Mixin(BrewingStandBlockEntity.class)
 public class MixinBrewingStandBlockEntity {
-    @Inject(method = "Lnet/minecraft/block/entity/BrewingStandBlockEntity;canCraft(Lnet/minecraft/recipe/BrewingRecipeRegistry;Lnet/minecraft/util/collection/DefaultedList;)Z", at = @At("HEAD"), cancellable = true)
-    private static void injected(BrewingRecipeRegistry brewingRecipeRegistry, DefaultedList<ItemStack> slots, CallbackInfoReturnable<Boolean> cir) {
+    @Inject(method = "isBrewable(Lnet/minecraft/world/item/alchemy/PotionBrewing;Lnet/minecraft/core/NonNullList;)Z", at = @At("HEAD"), cancellable = true)
+    private static void injected(PotionBrewing brewingRecipeRegistry, NonNullList<ItemStack> slots, CallbackInfoReturnable<Boolean> cir) {
         ItemStack itemStack = slots.get(3);
-        if (itemStack.isOf(Items.MILK_BUCKET)) {
+        if (itemStack.is(Items.MILK_BUCKET)) {
             for (int i = 0; i < 3; ++i) {
                 ItemStack itemStack2 = slots.get(i);
                 if (qualifiedWaterBottle(itemStack2))
                     cir.setReturnValue(true);
             }
         }
-        if (itemStack.isOf(Items.GUNPOWDER)) {
+        if (itemStack.is(Items.GUNPOWDER)) {
             for (int i = 0; i < 3; ++i) {
                 ItemStack itemStack2 = slots.get(i);
-                if (itemStack2.isOf(ItemRegistry.MILK_BOTTLE))
+                if (itemStack2.is(ItemRegistry.MILK_BOTTLE))
                     cir.setReturnValue(true);
             }
         }
 
-        if (itemStack.isOf(Items.DRAGON_BREATH)) {
+        if (itemStack.is(Items.DRAGON_BREATH)) {
             for (int i = 0; i < 3; ++i) {
                 ItemStack itemStack2 = slots.get(i);
-                if (itemStack2.isOf(ItemRegistry.SPLASH_MILK_BOTTLE))
+                if (itemStack2.is(ItemRegistry.SPLASH_MILK_BOTTLE))
                     cir.setReturnValue(true);
             }
         }
     }
 
-    @Inject(method = "craft(Lnet/minecraft/world/World;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/util/collection/DefaultedList;)V", at = @At("HEAD"), cancellable = true)
-    private static void injected(World world, BlockPos pos, DefaultedList<ItemStack> slots, CallbackInfo ci) {
+    @Inject(method = "doBrew(Lnet/minecraft/world/level/Level;Lnet/minecraft/core/BlockPos;Lnet/minecraft/core/NonNullList;)V", at = @At("HEAD"), cancellable = true)
+    private static void injected(Level world, BlockPos pos, NonNullList<ItemStack> slots, CallbackInfo ci) {
         ItemStack itemStack = slots.get(3);
-        if (itemStack.isOf(Items.MILK_BUCKET)) {
+        if (itemStack.is(Items.MILK_BUCKET)) {
             for (int i = 0; i < 3; ++i) {
                 if (qualifiedWaterBottle(slots.get(i))) {
-                    if(slots.get(i).isOf(Items.POTION)){
-                        slots.set(i, ItemRegistry.MILK_BOTTLE.getDefaultStack());
+                    if(slots.get(i).is(Items.POTION)){
+                        slots.set(i, ItemRegistry.MILK_BOTTLE.getDefaultInstance());
                     } else{
-                        ItemStack brewed = slots.get(i).isOf(Items.LINGERING_POTION) ?
-                                ItemRegistry.LINGERING_MILK_BOTTLE.getDefaultStack() :
-                                ItemRegistry.SPLASH_MILK_BOTTLE.getDefaultStack();
+                        ItemStack brewed = slots.get(i).is(Items.LINGERING_POTION) ?
+                                ItemRegistry.LINGERING_MILK_BOTTLE.getDefaultInstance() :
+                                ItemRegistry.SPLASH_MILK_BOTTLE.getDefaultInstance();
                         slots.set(i, brewed);
                     }
                 }
             }
-            slots.set(3, Items.BUCKET.getDefaultStack());
-            world.syncWorldEvent(1035, pos, 0);
+            slots.set(3, Items.BUCKET.getDefaultInstance());
+            world.levelEvent(1035, pos, 0);
             ci.cancel();
         }
 
-        if (itemStack.isOf(Items.GUNPOWDER)) {
+        if (itemStack.is(Items.GUNPOWDER)) {
             for (int i = 0; i < 3; ++i) {
-                if (slots.get(i).isOf(ItemRegistry.MILK_BOTTLE))
-                    slots.set(i, ItemRegistry.SPLASH_MILK_BOTTLE.getDefaultStack());
+                if (slots.get(i).is(ItemRegistry.MILK_BOTTLE))
+                    slots.set(i, ItemRegistry.SPLASH_MILK_BOTTLE.getDefaultInstance());
             }
         }
 
-        if (itemStack.isOf(Items.DRAGON_BREATH)) {
+        if (itemStack.is(Items.DRAGON_BREATH)) {
             for (int i = 0; i < 3; ++i) {
-                if (slots.get(i).isOf(ItemRegistry.SPLASH_MILK_BOTTLE))
-                    slots.set(i, ItemRegistry.LINGERING_MILK_BOTTLE.getDefaultStack());
+                if (slots.get(i).is(ItemRegistry.SPLASH_MILK_BOTTLE))
+                    slots.set(i, ItemRegistry.LINGERING_MILK_BOTTLE.getDefaultInstance());
             }
         }
     }
 
     private static boolean qualifiedWaterBottle(ItemStack itemStack) {
         if (itemStack.getItem() instanceof PotionItem) {
-            Optional<RegistryEntry<Potion>> optional = itemStack.getOrDefault(DataComponentTypes.POTION_CONTENTS, PotionContentsComponent.DEFAULT).potion();
+            Optional<Holder<Potion>> optional = itemStack.getOrDefault(DataComponents.POTION_CONTENTS, PotionContents.EMPTY).potion();
             if(optional.isPresent()){
                 var op = optional.get();
                 return op.equals(Potions.WATER) || op.equals(Potions.MUNDANE) || op.equals(Potions.THICK) || op.equals(Potions.AWKWARD);
@@ -99,9 +99,9 @@ public class MixinBrewingStandBlockEntity {
         return false;
     }
 
-    @Inject(method = "isValid(ILnet/minecraft/item/ItemStack;)Z", at = @At("HEAD"), cancellable = true)
+    @Inject(method = "canPlaceItem(ILnet/minecraft/world/item/ItemStack;)Z", at = @At("HEAD"), cancellable = true)
     public void injected(int slot, ItemStack stack, CallbackInfoReturnable<Boolean> cir) {
-        if (slot < 3 && (stack.isOf(ItemRegistry.MILK_BOTTLE) || stack.isOf(ItemRegistry.SPLASH_MILK_BOTTLE))) {
+        if (slot < 3 && (stack.is(ItemRegistry.MILK_BOTTLE) || stack.is(ItemRegistry.SPLASH_MILK_BOTTLE))) {
             cir.setReturnValue(true);
         }
     }

@@ -1,6 +1,6 @@
 package plus.dragons.splashmilk.neoforge.registry;
 
-import net.minecraft.client.particle.EmotionParticle;
+import net.minecraft.client.particle.HeartParticle;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -12,6 +12,6 @@ public class ParticleFactoryRegistry {
 
     @SubscribeEvent
     public static void onParticleProviderRegistration(RegisterParticleProvidersEvent event) {
-        event.registerSpriteSet(ParticleTypeRegistry.MILK_AREA_EFFECT.get(), EmotionParticle.AngryVillagerFactory::new);
+        event.registerSpriteSet(ParticleTypeRegistry.MILK_AREA_EFFECT.get(), HeartParticle.AngryVillagerProvider::new);
     }
 }

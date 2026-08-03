@@ -1,20 +1,20 @@
 package plus.dragons.splashmilk.fabric;
 
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.projectile.thrown.ThrownItemEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.Items;
-import net.minecraft.particle.ParticleEffect;
 import plus.dragons.splashmilk.entity.MIlkAreaEffectCloudEntity;
 import plus.dragons.splashmilk.fabric.registry.EntityRegistry;
 import plus.dragons.splashmilk.fabric.registry.ItemRegistry;
 import plus.dragons.splashmilk.fabric.registry.ParticleTypeRegistry;
 
 import java.util.function.Supplier;
+import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.projectile.throwableitemprojectile.ThrowableItemProjectile;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Items;
 
 public class PlatformUtilImpl {
-    public static Item.Settings milkBottleSetting() {
-        return new Item.Settings().recipeRemainder(Items.GLASS_BOTTLE);
+    public static Item.Properties milkBottleSetting() {
+        return new Item.Properties().craftRemainder(Items.GLASS_BOTTLE);
     }
 
     public static Supplier<Item> getLingerMIlkBottleItem() {
@@ -25,7 +25,7 @@ public class PlatformUtilImpl {
         return () -> ItemRegistry.SPLASH_MILK_BOTTLE;
     }
 
-    public static Supplier<EntityType<? extends ThrownItemEntity>> getMIlkBottleEntityType() {
+    public static Supplier<EntityType<? extends ThrowableItemProjectile>> getMIlkBottleEntityType() {
         return () -> EntityRegistry.MILK_BOTTLE;
     }
 
@@ -33,7 +33,7 @@ public class PlatformUtilImpl {
         return () -> EntityRegistry.MILK_AREA_EFFECT_CLOUD;
     }
 
-    public static Supplier<? extends ParticleEffect> getMilkCloudParticle() {
+    public static Supplier<? extends ParticleOptions> getMilkCloudParticle() {
         return () -> ParticleTypeRegistry.MILK_AREA_EFFECT;
     }
 }

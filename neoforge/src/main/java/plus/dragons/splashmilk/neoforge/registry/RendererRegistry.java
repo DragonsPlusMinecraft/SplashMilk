@@ -1,7 +1,7 @@
 package plus.dragons.splashmilk.neoforge.registry;
 
-import net.minecraft.client.render.entity.EmptyEntityRenderer;
-import net.minecraft.client.render.entity.FlyingItemEntityRenderer;
+import net.minecraft.client.renderer.entity.NoopRenderer;
+import net.minecraft.client.renderer.entity.ThrownItemRenderer;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -14,7 +14,7 @@ public class RendererRegistry {
 
     @SubscribeEvent
     public static void onClientSetUpEvent(EntityRenderersEvent.RegisterRenderers event) {
-        event.registerEntityRenderer(EntityRegistry.MILK_AREA_EFFECT_CLOUD.get(), EmptyEntityRenderer::new);
-        event.registerEntityRenderer(EntityRegistry.MILK_BOTTLE.get(), FlyingItemEntityRenderer::new);
+        event.registerEntityRenderer(EntityRegistry.MILK_AREA_EFFECT_CLOUD.get(), NoopRenderer::new);
+        event.registerEntityRenderer(EntityRegistry.MILK_BOTTLE.get(), ThrownItemRenderer::new);
     }
 }

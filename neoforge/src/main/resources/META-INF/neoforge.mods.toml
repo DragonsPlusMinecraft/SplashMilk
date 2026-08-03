@@ -5,7 +5,7 @@ license = "MIT"
 modId = "splash_milk" #mandatory
 version = "${version}" #mandatory
 displayName = "Splash Milk" #mandatory
-logoFile = "logo.png" #optional
+logoFile = "icon.png" #optional
 authors = "MarbleGate" #optional
 description = '''
 Wait Steve, why don't you try putting milk in a potion bottle?
@@ -13,12 +13,12 @@ Wait Steve, why don't you try putting milk in a potion bottle?
 [[dependencies.splash_milk]] #optional
 modId = "neoforge"
 type = "required"
-versionRange = "[21.0,)"
+versionRange = "[21.11,)"
 ordering = "NONE"
 side = "BOTH"
 [[dependencies.splash_milk]]
 modId = "minecraft"
 type = "required"
-versionRange = "[1.21.3,1.22)"
+versionRange = "[1.21.11,1.22)"
 ordering = "NONE"
 side = "BOTH"

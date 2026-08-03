@@ -2,10 +2,10 @@ package plus.dragons.splashmilk.fabric;
 
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.player.UseEntityCallback;
-import net.minecraft.entity.passive.CowEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.util.ActionResult;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.animal.cow.Cow;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import plus.dragons.splashmilk.fabric.registry.EntityRegistry;
 import plus.dragons.splashmilk.fabric.registry.ItemRegistry;
 import plus.dragons.splashmilk.fabric.registry.ParticleTypeRegistry;
@@ -20,16 +20,16 @@ public class SplashMilk implements ModInitializer {
         EntityRegistry.ini();
 
         UseEntityCallback.EVENT.register((player, world, hand, entity, hitResult)->{
-            if(player.getWorld().isClient()) return ActionResult.PASS;
-            if(entity instanceof CowEntity && entity.isAlive()){
-                ItemStack itemStack = player.getStackInHand(hand);
-                if(itemStack.isOf(Items.GLASS_BOTTLE)){
-                    itemStack.decrement(1);
-                    player.giveItemStack(ItemRegistry.MILK_BOTTLE.getDefaultStack());
-                    return ActionResult.SUCCESS;
+            if(player.level().isClientSide()) return InteractionResult.PASS;
+            if(entity instanceof Cow && entity.isAlive()){
+                ItemStack itemStack = player.getItemInHand(hand);
+                if(itemStack.is(Items.GLASS_BOTTLE)){
+                    itemStack.shrink(1);
+                    player.addItem(ItemRegistry.MILK_BOTTLE.getDefaultInstance());
+                    return InteractionResult.SUCCESS;
                 }
             }
-            return ActionResult.PASS;
+            return InteractionResult.PASS;
         });
     }
 }

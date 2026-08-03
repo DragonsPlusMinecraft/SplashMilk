@@ -1,69 +1,70 @@
 package plus.dragons.splashmilk.entity;
 
-import net.minecraft.block.AbstractCandleBlock;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.CampfireBlock;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.projectile.thrown.ThrownItemEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.registry.tag.BlockTags;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.hit.BlockHitResult;
-import net.minecraft.util.hit.HitResult;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Box;
-import net.minecraft.util.math.Direction;
-import net.minecraft.world.World;
 import plus.dragons.splashmilk.PlatformUtil;
 
 import java.util.List;
 import java.util.function.Predicate;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntitySelector;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.projectile.throwableitemprojectile.ThrowableItemProjectile;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.AbstractCandleBlock;
+import net.minecraft.world.level.block.CampfireBlock;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.HitResult;
 
-public class MilkBottleEntity extends ThrownItemEntity {
-    public static final Predicate<LivingEntity> WATER_SENSITIVE = LivingEntity::hurtByWater;
+public class MilkBottleEntity extends ThrowableItemProjectile {
+    public static final Predicate<LivingEntity> WATER_SENSITIVE = LivingEntity::isSensitiveToWater;
 
-    public MilkBottleEntity(EntityType<? extends MilkBottleEntity> entityType, World world) {
+    public MilkBottleEntity(EntityType<? extends MilkBottleEntity> entityType, Level world) {
         super(entityType, world);
     }
 
-    public MilkBottleEntity(World world, LivingEntity livingEntity, ItemStack itemStack) {
+    public MilkBottleEntity(Level world, LivingEntity livingEntity, ItemStack itemStack) {
         super(PlatformUtil.getMIlkBottleEntityType().get(), livingEntity, world, itemStack);
     }
 
-    public MilkBottleEntity(World world, double x, double y, double z, ItemStack stack) {
+    public MilkBottleEntity(Level world, double x, double y, double z, ItemStack stack) {
         super(PlatformUtil.getMIlkBottleEntityType().get(), x, y, z, world, stack);
     }
 
     @Override
-    protected double getGravity() {
+    protected double getDefaultGravity() {
         return 0.05F;
     }
 
     @Override
-    protected void onBlockHit(BlockHitResult blockHitResult) {
-        super.onBlockHit(blockHitResult);
-        if (!getWorld().isClient()) {
-            Direction direction = blockHitResult.getSide();
+    protected void onHitBlock(BlockHitResult blockHitResult) {
+        super.onHitBlock(blockHitResult);
+        if (!level().isClientSide()) {
+            Direction direction = blockHitResult.getDirection();
             BlockPos blockpos = blockHitResult.getBlockPos();
-            BlockPos blockpos1 = blockpos.offset(direction);
+            BlockPos blockpos1 = blockpos.relative(direction);
 
             extinguishFire(blockpos1);
-            extinguishFire(blockpos1.offset(direction.getOpposite()));
+            extinguishFire(blockpos1.relative(direction.getOpposite()));
 
-            for (Direction direction1 : Direction.Type.HORIZONTAL) {
-                extinguishFire(blockpos1.offset(direction1));
+            for (Direction direction1 : Direction.Plane.HORIZONTAL) {
+                extinguishFire(blockpos1.relative(direction1));
             }
 
         }
     }
 
     @Override
-    protected void onCollision(HitResult hitResult) {
-        super.onCollision(hitResult);
-        if (!getWorld().isClient()) {
+    protected void onHit(HitResult hitResult) {
+        super.onHit(hitResult);
+        if (!level().isClientSide()) {
 
             applyWater();
 
@@ -73,19 +74,19 @@ public class MilkBottleEntity extends ThrownItemEntity {
                 applySplash();
             }
             // 2007 see PotionEntity & WorldRenderer, 16253176 see PotionUtils#getColor
-            getWorld().syncWorldEvent(2007, this.getBlockPos(), 16777215);
+            level().levelEvent(2007, this.blockPosition(), 16777215);
             remove(RemovalReason.DISCARDED);
         }
     }
 
     private void applyWater() {
-        Box box = getBoundingBox().expand(4.0D, 2.0D, 4.0D);
-        List<LivingEntity> list = getWorld().getEntitiesByClass(LivingEntity.class, box, WATER_SENSITIVE);
+        AABB box = getBoundingBox().inflate(4.0D, 2.0D, 4.0D);
+        List<LivingEntity> list = level().getEntitiesOfClass(LivingEntity.class, box, WATER_SENSITIVE);
         if (!list.isEmpty()) {
             for (LivingEntity livingentity : list) {
-                double d0 = squaredDistanceTo(livingentity);
-                if (d0 < 16.0D && livingentity.hurtByWater()) {
-                    livingentity.damage((ServerWorld) getWorld(),getDamageSources().indirectMagic(this, getOwner()), 1.0F);
+                double d0 = distanceToSqr(livingentity);
+                if (d0 < 16.0D && livingentity.isSensitiveToWater()) {
+                    livingentity.hurtServer((ServerLevel) level(), damageSources().indirectMagic(this, getOwner()), 1.0F);
                 }
             }
         }
@@ -93,18 +94,18 @@ public class MilkBottleEntity extends ThrownItemEntity {
     }
 
     private void applySplash() {
-        Box box = getBoundingBox().expand(4.0D, 2.0D, 4.0D);
-        List<LivingEntity> list = getWorld().getNonSpectatingEntities(LivingEntity.class, box);
+        AABB box = getBoundingBox().inflate(4.0D, 2.0D, 4.0D);
+        List<LivingEntity> list = level().getEntitiesOfClass(LivingEntity.class, box, EntitySelector.NO_SPECTATORS);
         if (!list.isEmpty()) {
             for (LivingEntity livingentity : list) {
-                livingentity.clearStatusEffects();
+                livingentity.removeAllEffects();
             }
         }
 
     }
 
     private void makeAreaOfEffectCloud() {
-        MIlkAreaEffectCloudEntity cloudEntity = new MIlkAreaEffectCloudEntity(getWorld(), getX(), getY(), getZ());
+        MIlkAreaEffectCloudEntity cloudEntity = new MIlkAreaEffectCloudEntity(level(), getX(), getY(), getZ());
         Entity entity = getOwner();
         if (entity instanceof LivingEntity) {
             cloudEntity.setOwner((LivingEntity) entity);
@@ -115,23 +116,23 @@ public class MilkBottleEntity extends ThrownItemEntity {
         cloudEntity.setWaitTime(10);
         cloudEntity.setRadiusPerTick(-cloudEntity.getRadius() / (float) cloudEntity.getDuration());
 
-        getWorld().spawnEntity(cloudEntity);
+        level().addFreshEntity(cloudEntity);
     }
 
     private boolean isLingering() {
-        return getStack().getItem() == PlatformUtil.getLingerMIlkBottleItem().get();
+        return getItem().getItem() == PlatformUtil.getLingerMIlkBottleItem().get();
     }
 
     private void extinguishFire(BlockPos blockPos) {
-        BlockState blockState = getWorld().getBlockState(blockPos);
-        if (blockState.isIn(BlockTags.FIRE)) {
-            getWorld().removeBlock(blockPos, false);
-        } else if (AbstractCandleBlock.isLitCandle(blockState)) {
-            AbstractCandleBlock.extinguish(null, blockState, this.getWorld(), blockPos);
+        BlockState blockState = level().getBlockState(blockPos);
+        if (blockState.is(BlockTags.FIRE)) {
+            level().removeBlock(blockPos, false);
+        } else if (AbstractCandleBlock.isLit(blockState)) {
+            AbstractCandleBlock.extinguish(null, blockState, level(), blockPos);
         } else if (CampfireBlock.isLitCampfire(blockState)) {
-            getWorld().syncWorldEvent(null, 1009, blockPos, 0);
-            CampfireBlock.extinguish(null, getWorld(), blockPos, blockState);
-            getWorld().setBlockState(blockPos, blockState.with(CampfireBlock.LIT, false));
+            level().levelEvent(null, 1009, blockPos, 0);
+            CampfireBlock.dowse(null, level(), blockPos, blockState);
+            level().setBlockAndUpdate(blockPos, blockState.setValue(CampfireBlock.LIT, false));
         }
 
     }
