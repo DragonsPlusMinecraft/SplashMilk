@@ -11,12 +11,12 @@ Wait Steve, why don't you try putting milk in a potion bottle?
 [[dependencies.splash_milk]] #optional
 modId = "neoforge"
 type = "required"
-versionRange = "[26.1.2.94,)"
+versionRange = "[26.2.0.45-beta,)"
 ordering = "NONE"
 side = "BOTH"
 [[dependencies.splash_milk]]
 modId = "minecraft"
 type = "required"
-versionRange = "[26.1.2]"
+versionRange = "[26.2]"
 ordering = "NONE"
 side = "BOTH"
