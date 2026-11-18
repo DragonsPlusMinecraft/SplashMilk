@@ -21,28 +21,31 @@ public class RecipeRegistry {
         event.getBuilder().addRecipe(new CustomBrewingRecipe());
     }
 
-    static class CustomBrewingRecipe implements IBrewingRecipe{
+    static class CustomBrewingRecipe implements IBrewingRecipe {
 
         @Override
-        public boolean isInput(ItemStack arg) {
-            if(arg.isOf(Items.POTION)||arg.isOf(Items.SPLASH_POTION)||arg.isOf(Items.LINGERING_POTION)){
-                PotionContentsComponent p = arg.get(DataComponentTypes.POTION_CONTENTS);
-                return p.matches(Potions.WATER) || p.matches(Potions.THICK) || p.matches(Potions.MUNDANE) || p.matches(Potions.AWKWARD);
+        public boolean isInput(ItemStack input) {
+            if (!input.isOf(Items.POTION) && !input.isOf(Items.SPLASH_POTION) && !input.isOf(Items.LINGERING_POTION)) {
+                return false;
             }
-            return false;
+            PotionContentsComponent contents = input.getOrDefault(DataComponentTypes.POTION_CONTENTS, PotionContentsComponent.DEFAULT);
+            return contents.matches(Potions.WATER) || contents.matches(Potions.THICK) || contents.matches(Potions.MUNDANE) || contents.matches(Potions.AWKWARD);
         }
 
         @Override
-        public boolean isIngredient(ItemStack arg) {
-            return arg.isOf(Items.MILK_BUCKET);
+        public boolean isIngredient(ItemStack ingredient) {
+            return ingredient.isOf(Items.MILK_BUCKET);
         }
 
         @Override
-        public ItemStack getOutput(ItemStack arg, ItemStack arg2) {
-            if(arg.isOf(Items.POTION)){
+        public ItemStack getOutput(ItemStack input, ItemStack ingredient) {
+            if (!isIngredient(ingredient) || !isInput(input)) {
+                return ItemStack.EMPTY;
+            }
+            if (input.isOf(Items.POTION)) {
                 return ItemRegistry.MILK_BOTTLE.get().getDefaultStack();
             }
-            if(arg.isOf(Items.SPLASH_POTION)){
+            if (input.isOf(Items.SPLASH_POTION)) {
                 return ItemRegistry.SPLASH_MILK_BOTTLE.get().getDefaultStack();
             }
             return ItemRegistry.LINGERING_MILK_BOTTLE.get().getDefaultStack();
