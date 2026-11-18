@@ -1,8 +1,3 @@
-## The Splash Milk 3.0.1
+## The Splash Milk 3.0.2
 
-# Update
-* Add uk_ua translation (@Starman)
-* Add ru_ru translation (@Karbin Drem)
-
-# Fix
-* Fix milk bottle crafting recipe issue
+- Fixed a brewing bug that caused vanilla potion recipes to produce milk. A milk bucket now converts only water bottles and awkward, mundane, or thick potions, preserving the bottle type.
