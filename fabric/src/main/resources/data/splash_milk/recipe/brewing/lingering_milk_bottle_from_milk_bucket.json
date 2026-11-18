@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:brewing",
+  "input": {
+    "item": "minecraft:lingering_potion",
+    "potion_contents": {
+      "potions": "#splash_milk:milk_bottle_bases"
+    }
+  },
+  "reagent": {
+    "item": "minecraft:milk_bucket"
+  },
+  "output": {
+    "id": "splash_milk:lingering_milk_bottle"
+  }
+}

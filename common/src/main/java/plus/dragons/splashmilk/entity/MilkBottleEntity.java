@@ -131,7 +131,7 @@ public class MilkBottleEntity extends ThrowableItemProjectile {
             AbstractCandleBlock.extinguish(null, blockState, level(), blockPos);
         } else if (CampfireBlock.isLitCampfire(blockState)) {
             level().levelEvent(null, 1009, blockPos, 0);
-            CampfireBlock.dowse(null, level(), blockPos, blockState);
+            CampfireBlock.douse(null, level(), blockPos, blockState);
             level().setBlockAndUpdate(blockPos, blockState.setValue(CampfireBlock.LIT, false));
         }
 
