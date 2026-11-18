@@ -21,28 +21,31 @@ public class RecipeRegistry {
         event.getBuilder().addRecipe(new CustomBrewingRecipe());
     }
 
-    static class CustomBrewingRecipe implements IBrewingRecipe{
+    static class CustomBrewingRecipe implements IBrewingRecipe {
 
         @Override
-        public boolean isInput(ItemStack arg) {
-            if(arg.is(Items.POTION)||arg.is(Items.SPLASH_POTION)||arg.is(Items.LINGERING_POTION)){
-                PotionContents p = arg.get(DataComponents.POTION_CONTENTS);
-                return p.is(Potions.WATER) || p.is(Potions.THICK) || p.is(Potions.MUNDANE) || p.is(Potions.AWKWARD);
+        public boolean isInput(ItemStack input) {
+            if (!input.is(Items.POTION) && !input.is(Items.SPLASH_POTION) && !input.is(Items.LINGERING_POTION)) {
+                return false;
             }
-            return false;
+            PotionContents contents = input.getOrDefault(DataComponents.POTION_CONTENTS, PotionContents.EMPTY);
+            return contents.is(Potions.WATER) || contents.is(Potions.THICK) || contents.is(Potions.MUNDANE) || contents.is(Potions.AWKWARD);
         }
 
         @Override
-        public boolean isIngredient(ItemStack arg) {
-            return arg.is(Items.MILK_BUCKET);
+        public boolean isIngredient(ItemStack ingredient) {
+            return ingredient.is(Items.MILK_BUCKET);
         }
 
         @Override
-        public ItemStack getOutput(ItemStack arg, ItemStack arg2) {
-            if(arg.is(Items.POTION)){
+        public ItemStack getOutput(ItemStack input, ItemStack ingredient) {
+            if (!isIngredient(ingredient) || !isInput(input)) {
+                return ItemStack.EMPTY;
+            }
+            if (input.is(Items.POTION)) {
                 return ItemRegistry.MILK_BOTTLE.get().getDefaultInstance();
             }
-            if(arg.is(Items.SPLASH_POTION)){
+            if (input.is(Items.SPLASH_POTION)) {
                 return ItemRegistry.SPLASH_MILK_BOTTLE.get().getDefaultInstance();
             }
             return ItemRegistry.LINGERING_MILK_BOTTLE.get().getDefaultInstance();
